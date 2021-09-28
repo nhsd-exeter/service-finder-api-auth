@@ -1,0 +1,14 @@
+cognito:
+  userPool.clientId: ${COGNITO_USER_POOL_CLIENT_ID}
+  userPool.id: ${COGNITO_USER_POOL_ID}
+  userPool.clientSecret: ${COGNITO_USER_POOL_CLIENT_SECRET}
+
+server:
+  port: ${SERVER_PORT}
+  ssl:
+    key-store-type: PKCS12
+    keystore: classpath:certificate/${CERTIFICATE_DOMAIN}.p12
+    key-store-password:
+
+configuration:
+  version: ${VERSION}
