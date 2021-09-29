@@ -164,9 +164,22 @@ pipeline-create-resources: ## Create all the pipeline deployment supporting reso
 	#make ssl-request-certificate-prod SSL_DOMAINS_PROD
 	# Centralised, i.e. `mgmt`
 	eval "$$(make aws-assume-role-export-variables AWS_ACCOUNT_ID=$(AWS_ACCOUNT_ID_MGMT))"
-	#make docker-create-repository NAME=NAME_TEMPLATE_TO_REPLACE
+	#make docker-create-repository NAME=uec-dos-api/sfa/api
 	#make aws-codeartifact-setup REPOSITORY_NAME=$(PROJECT_GROUP_SHORT)
+
+derive-build-tag:
+	dir=$$(make _docker-get-dir NAME=dos-auth-api)
+	echo $$(cat $$dir/VERSION) | \
+				sed "s/YYYY/$$(date --date=$(BUILD_DATE) -u +"%Y")/g" | \
+				sed "s/mm/$$(date --date=$(BUILD_DATE) -u +"%m")/g" | \
+				sed "s/dd/$$(date --date=$(BUILD_DATE) -u +"%d")/g" | \
+				sed "s/HH/$$(date --date=$(BUILD_DATE) -u +"%H")/g" | \
+				sed "s/MM/$$(date --date=$(BUILD_DATE) -u +"%M")/g" | \
+				sed "s/ss/$$(date --date=$(BUILD_DATE) -u +"%S")/g" | \
+				sed "s/SS/$$(date --date=$(BUILD_DATE) -u +"%S")/g" | \
+				sed "s/hash/$$(git rev-parse --short HEAD)/g"
 
 # ==============================================================================
 
-.SILENT:
+.SILENT: \
+	derive-build-tag
