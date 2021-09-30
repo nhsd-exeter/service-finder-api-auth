@@ -1,0 +1,7 @@
+cognito:
+  userPool.clientId: testUserPoolClientId
+  userPool.id: ${COGNITO_USER_POOL_ID}
+  userPool.clientSecret: testUserPoolClientSecret
+local:
+  host: https://localhost
+  uri: authentication/login

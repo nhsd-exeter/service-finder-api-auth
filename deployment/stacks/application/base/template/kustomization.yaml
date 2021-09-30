@@ -1,0 +1,33 @@
+namespace: K8S_APP_NAMESPACE_TO_REPLACE
+
+commonLabels:
+  env: PROFILE_TO_REPLACE
+
+commonAnnotations:
+  splunk.com/index: SPLUNK_INDEX_TO_REPLACE
+
+resources:
+  - namespace.yaml
+  - network-policy/uec-sfs-default-deny-ingress.yaml
+  - network-policy/service-authentication-allow-external-ingress.yaml
+  - service-authentication/service-account.yaml
+  - service-authentication/service-authentication-deployment.yaml
+  - service-authentication/service-authentication-service.yaml
+
+configMapGenerator:
+  - name: service-authentication-configmap
+    literals:
+      - COGNITO_USER_POOL=COGNITO_USER_POOL_TO_REPLACE
+      - COGNITO_USER_POOL_CLIENT_SECRET=COGNITO_USER_POOL_CLIENT_SECRET_TO_REPLACE
+      - COGNITO_USER_POOL_CLIENT_ID=COGNITO_USER_POOL_CLIENT_ID_TO_REPLACE
+      - COGNITO_USER_POOL_ID=COGNITO_USER_POOL_ID_TO_REPLACE
+      - CERTIFICATE_DOMAIN=CERTIFICATE_DOMAIN_TO_REPLACE
+      - ALLOWED_ORIGINS=ALLOWED_ORIGINS_TO_REPLACE
+      - PROFILE=PROFILE_TO_REPLACE
+      - SPRING_PROFILES_ACTIVE=SPRING_PROFILES_ACTIVE_TO_REPLACE
+      - SERVER_PORT=AUTH_SERVER_PORT_TO_REPLACE
+      - VERSION=VERSION_TO_REPLACE
+
+images:
+  - name: AWS_ECR_TO_REPLACE/uec-dos-api/sfa/api
+    newTag: API_IMAGE_TAG_TO_REPLACE

@@ -1,11 +1,34 @@
 PROJECT_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 include $(abspath $(PROJECT_DIR)/build/automation/init.mk)
+DOCKER_REGISTRY_LIVE = $(DOCKER_REGISTRY)/prod
+
+derive-build-tag:
+	dir=$$(make _docker-get-dir NAME=api)
+	echo $$(cat $$dir/VERSION) | \
+				sed "s/YYYY/$$(date --date=$(BUILD_DATE) -u +"%Y")/g" | \
+				sed "s/mm/$$(date --date=$(BUILD_DATE) -u +"%m")/g" | \
+				sed "s/dd/$$(date --date=$(BUILD_DATE) -u +"%d")/g" | \
+				sed "s/HH/$$(date --date=$(BUILD_DATE) -u +"%H")/g" | \
+				sed "s/MM/$$(date --date=$(BUILD_DATE) -u +"%M")/g" | \
+				sed "s/ss/$$(date --date=$(BUILD_DATE) -u +"%S")/g" | \
+				sed "s/SS/$$(date --date=$(BUILD_DATE) -u +"%S")/g" | \
+				sed "s/hash/$$(git rev-parse --short HEAD)/g"
 
 # ==============================================================================
 # Development workflow targets
 
 build: project-config # Build project
-	make docker-build NAME=NAME_TEMPLATE_TO_REPLACE
+	make \
+	load-cert-to-application \
+	docker-run-mvn \
+		DIR="application/authentication" \
+		CMD="-Dmaven.test.skip=true clean install" \
+		LIB_VOLUME_MOUNT="true" \
+		PROFILE=local
+	mv \
+		$(PROJECT_DIR)application/authentication/target/service-finder-api-auth-*.jar \
+		$(PROJECT_DIR)build/docker/api/assets/application/dos-service-finder-authentication-api.jar
+	make docker-build NAME=api
 
 start: project-start # Start project
 
@@ -16,11 +39,15 @@ restart: stop start # Restart project
 log: project-log # Show project logs
 
 test: # Test project
-	make start
-	make stop
+	make docker-run-mvn \
+		DIR="application/authentication" \
+		CMD="clean test" \
+		LIB_VOLUME_MOUNT="true" \
+		PROFILE=local \
+		VARS_FILE=$(VAR_DIR)/profile/local.mk
 
 push: # Push project artefacts to the registry
-	make docker-push NAME=NAME_TEMPLATE_TO_REPLACE
+	make docker-push NAME=api
 
 deploy: # Deploy artefacts - mandatory: PROFILE=[name]
 	make project-deploy STACK=application PROFILE=$(PROFILE)
@@ -34,6 +61,10 @@ clean: # Clean up project
 # Supporting targets
 
 trust-certificate: ssl-trust-certificate-project ## Trust the SSL development certificate
+
+load-cert-to-application: ## Copies certificates to project directory
+	cp $(PROJECT_DIR)/build/automation/etc/certificate/* $(PROJECT_DIR)/application/authentication/src/main/resources/certificate
+
 
 # ==============================================================================
 # Pipeline targets

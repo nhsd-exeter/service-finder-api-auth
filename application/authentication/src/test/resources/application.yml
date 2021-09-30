@@ -1,0 +1,9 @@
+server:
+  port: 8992
+  ssl:
+    key-store-type: PKCS12
+    keystore: classpath:certificate/certificate.p12
+    key-store-password:
+
+configuration:
+  version: testVersionv1.0
