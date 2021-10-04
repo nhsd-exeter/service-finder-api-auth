@@ -1,8 +1,8 @@
-# PROJECT_NAME_TO_REPLACE
+# SERVICE-FINDER-API-AUTH
 
 ## Table of Contents
 
-- [PROJECT_NAME_TO_REPLACE](#project_name_to_replace)
+- [SERVICE-FINDER-API-AUTH](#service-finder-api-auth)
   - [Table of Contents](#table-of-contents)
   - [Overview](#overview)
   - [Quick Start](#quick-start)
