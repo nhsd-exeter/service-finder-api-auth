@@ -31,13 +31,6 @@ pipeline {
         }
       }
     }
-    stage("Prepare") {
-      steps {
-        script {
-          sh 'make prepare'
-        }
-      }
-    }
     stage("Create Release Image") {
       steps {
         script {

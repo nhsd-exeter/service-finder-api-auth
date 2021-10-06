@@ -38,6 +38,7 @@ project-log: ### Print log from Docker Compose
 	make docker-compose-log
 
 project-deploy: ### Deploy application stack to the Kubernetes cluster - mandatory: STACK|STACKS|DEPLOYMENT_STACKS=[comma-separated names],PROFILE=[profile name]
+	eval "$$(make aws-assume-role-export-variables)"
 	eval "$$(make project-populate-application-variables)"
 	make k8s-deploy STACK=$(or $(STACK), $(or $(STACKS), $(DEPLOYMENT_STACKS)))
 

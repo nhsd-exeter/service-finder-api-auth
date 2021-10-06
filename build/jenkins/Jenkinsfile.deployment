@@ -32,13 +32,7 @@ pipeline {
         }
       }
     }
-    stage('Prepare') {
-      steps {
-        script {
-          sh "make prepare"
-        }
-      }
-    }
+    /*
     stage("Plan Infrastructure") {
       steps {
         script {
@@ -53,17 +47,11 @@ pipeline {
         }
       }
     }
-    stage("Populate Search DB") {
-      steps {
-        script {
-          echo "to do"
-        }
-      }
-    }
+    */
     stage("Deploy API") {
       steps {
         script {
-          sh "make deploy PROFILE=${env.PROFILE} API_IMAGE_TAG=${IMAGE_TAG}"
+          sh "make deploy PROFILE=${env.PROFILE} IMAGE_TAG=${IMAGE_TAG}"
         }
       }
     }
@@ -81,11 +69,6 @@ pipeline {
         }
       }
     }
-  }
-
-  post {
-    success { sh "make pipeline-on-success" }
-    failure { sh "make pipeline-on-failure" }
   }
 
 }

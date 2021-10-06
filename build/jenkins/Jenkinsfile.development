@@ -25,13 +25,15 @@ pipeline {
         }
       }
     }
-    stage('Prepare') {
+    /*
+    stage("Plan Infrastructure") {
       steps {
         script {
-          sh "make prepare"
+          sh "make plan PROFILE=${env.PROFILE}"
         }
       }
     }
+    */
     stage('Derive Build Tag') {
       steps {
         script {
@@ -46,7 +48,6 @@ pipeline {
         }
       }
     }
-    /*
     stage('Unit Test') {
       steps {
         script {
@@ -54,14 +55,13 @@ pipeline {
         }
       }
     }
-
     stage('Run Contract Tests') {
       steps {
         script {
-          sh "make run-contract-tests VERSION=${env.PROJECT_BUILD_TAG}"
+          echo "to do"
         }
       }
-    }*/
+    }
     stage('Push API Image to ECR') {
       steps {
         script {
@@ -76,12 +76,6 @@ pipeline {
         }
       }
     }
-  }
-
-  post {
-    always { sh "make stop" }
-    success { sh "make pipeline-on-success" }
-    failure { sh "make pipeline-on-failure" }
   }
 
 }
