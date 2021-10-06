@@ -167,18 +167,6 @@ pipeline-create-resources: ## Create all the pipeline deployment supporting reso
 	#make docker-create-repository NAME=uec-dos-api/sfa/api
 	#make aws-codeartifact-setup REPOSITORY_NAME=$(PROJECT_GROUP_SHORT)
 
-derive-build-tag:
-	dir=$$(make _docker-get-dir NAME=dos-auth-api)
-	echo $$(cat $$dir/VERSION) | \
-				sed "s/YYYY/$$(date --date=$(BUILD_DATE) -u +"%Y")/g" | \
-				sed "s/mm/$$(date --date=$(BUILD_DATE) -u +"%m")/g" | \
-				sed "s/dd/$$(date --date=$(BUILD_DATE) -u +"%d")/g" | \
-				sed "s/HH/$$(date --date=$(BUILD_DATE) -u +"%H")/g" | \
-				sed "s/MM/$$(date --date=$(BUILD_DATE) -u +"%M")/g" | \
-				sed "s/ss/$$(date --date=$(BUILD_DATE) -u +"%S")/g" | \
-				sed "s/SS/$$(date --date=$(BUILD_DATE) -u +"%S")/g" | \
-				sed "s/hash/$$(git rev-parse --short HEAD)/g"
-
 # ==============================================================================
 
 .SILENT: \
