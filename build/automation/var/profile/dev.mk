@@ -26,6 +26,8 @@ INFRASTRUCTURE_STACKS := authentication
 TF_VAR_service_prefix := sf-authentication-$(PROFILE)
 TF_VAR_service_prefix_short := sfa-$(PROFILE)
 
+ADD_DEFAULT_COGNITO_USERS := false
+
 #Cognito user pool details
 COGNITO_USER_POOL := sf-authentication-dev-pool
 COGNITO_USER_POOL_CLIENT_SECRET := $(or $(COGNITO_USER_POOL_CLIENT_SECRET), )
