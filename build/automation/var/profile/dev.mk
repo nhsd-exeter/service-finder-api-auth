@@ -20,14 +20,14 @@ AUTH_SERVER_PORT := 443
 # ==============================================================================
 # Infrastructure variables
 
-DEPLOYMENT_STACKS = application
-INFRASTRUCTURE_STACKS = authentication
+DEPLOYMENT_STACKS := application
+INFRASTRUCTURE_STACKS := authentication
 
 TF_VAR_service_prefix := sf-authentication-$(PROFILE)
 TF_VAR_service_prefix_short := sfa-$(PROFILE)
 
 #Cognito user pool details
-COGNITO_USER_POOL = service-fuzzy-search-dev-pool
+COGNITO_USER_POOL := sf-authentication-dev-pool
 COGNITO_USER_POOL_CLIENT_SECRET := $(or $(COGNITO_USER_POOL_CLIENT_SECRET), )
 COGNITO_USER_POOL_CLIENT_ID := $(or $(COGNITO_USER_POOL_CLIENT_ID), )
 COGNITO_USER_POOL_ID := $(or $(COGNITO_USER_POOL_ID), )

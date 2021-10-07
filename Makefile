@@ -53,7 +53,10 @@ deploy: # Deploy artefacts - mandatory: PROFILE=[name]
 	make project-deploy STACK=application PROFILE=$(PROFILE)
 
 provision: # Provision environment - mandatory: PROFILE=[name]
-	make terraform-apply-auto-approve STACK=database PROFILE=$(PROFILE)
+	make terraform-apply-auto-approve STACK=$(INFRASTRUCTURE_STACKS) PROFILE=$(PROFILE)
+
+plan: # Plan environment - mandatory: PROFILE=[name]
+	make terraform-plan STACK=$(INFRASTRUCTURE_STACKS) PROFILE=$(PROFILE)
 
 clean: # Clean up project
 
