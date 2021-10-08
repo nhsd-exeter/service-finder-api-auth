@@ -72,7 +72,7 @@ The following is equivalent to the `curl -L bit.ly/make-devops-macos-setup | bas
 
 There are essential configuration options that **must** be set before proceeding any further. As a minimum the following command will ensure that tooling like `docker` and `git` are going to operate as expected, including local secret scanning and code formatting are enabled
 
-    make project-config
+    make setup
 
 Please, ask one of your colleagues for the AWS account numbers used by the project. The next command will prompt you to provide them. This information can be sourced from a properly set up project by running `make show-configuration | grep ^AWS_ACCOUNT_ID_`
 
@@ -84,6 +84,7 @@ Generate and trust a self-signed certificate that will be used locally to enable
 
 ### Local Project Setup
 
+    make [? python|java]-virtualenv
     make build
     make start log
     open https://ui.project.local:8443
