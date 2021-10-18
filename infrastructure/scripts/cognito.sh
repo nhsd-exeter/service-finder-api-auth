@@ -3,20 +3,38 @@ set -e
 
 [ -z "$PROFILE" ] && PROFILE="nonprod"
 
-COGNITO_GROUPS=(FUZZY_API_ACCESS POSTCODE_API_ACCESS)
-COGNITO_ADMIN_USER="api-authentication-admin@nhs.net"
+COGNITO_ALL_GROUPS=(FUZZY_API_ACCESS POSTCODE_API_ACCESS)
+COGNITO_FUZZY_GROUP=(FUZZY_API_ACCESS)
+COGNITO_POSTCODE_GROUP=(POSTCODE_API_ACCESS)
+COGNITO_AUTHENTICATION_ADMIN_USER="api-auth-admin@nhs.net"
+COGNITO_SERVICE_FINDER_USER="service-finder-admin@nhs.net"
+COGNITO_FUZZY_SEARCH_USER="fuzzy-search-api@nhs.net"
 COGNITO_PROFILE=$PROFILE
+
+# COGNITO_ADMIN_PASSWORD=$(
+#     aws secretsmanager get-secret-value \
+#         --secret-id api-authentication-$COGNITO_PROFILE-cognito-admin-password \
+#         --region $AWS_REGION \
+#         --query 'SecretString' \
+#         --output text)
+
+# USER_POOL_ID=$(
+#     aws cognito-idp list-user-pools \
+#         --query "UserPools[?Name=='api-authentication-$COGNITO_PROFILE-pool'].Id" \
+#     --region $AWS_REGION \
+#         --max-results 60 \
+#         --output text)
 
 COGNITO_ADMIN_PASSWORD=$(
     aws secretsmanager get-secret-value \
-        --secret-id api-authentication-$COGNITO_PROFILE-cognito-admin-password \
+        --secret-id uec-dos-api-sfsa-dev-cognito-admin-password \
         --region $AWS_REGION \
         --query 'SecretString' \
         --output text)
 
 USER_POOL_ID=$(
     aws cognito-idp list-user-pools \
-        --query "UserPools[?Name=='api-authentication-$COGNITO_PROFILE-pool'].Id" \
+        --query "UserPools[?Name=='uec-dos-api-sfsa-dev-pool'].Id" \
     --region $AWS_REGION \
         --max-results 60 \
         --output text)
@@ -127,7 +145,9 @@ function calculate_secret_hash {
 function cognito_setup_users_and_groups {
 
     cognito_setup_groups
-    cognito_setup_user $COGNITO_ADMIN_USER "${COGNITO_GROUPS[@]}"
+    cognito_setup_user $COGNITO_AUTHENTICATION_ADMIN_USER "${COGNITO_ALL_GROUPS[@]}"
+    cognito_setup_user $COGNITO_SERVICE_FINDER_USER "${COGNITO_FUZZY_GROUP[@]}"
+    cognito_setup_user $COGNITO_FUZZY_SEARCH_USER "${COGNITO_POSTCODE_GROUP[@]}"
 }
 
 function main {
