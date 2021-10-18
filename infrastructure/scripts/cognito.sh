@@ -27,14 +27,14 @@ COGNITO_PROFILE=$PROFILE
 
 COGNITO_ADMIN_PASSWORD=$(
     aws secretsmanager get-secret-value \
-        --secret-id uec-dos-api-sfsa-dev-cognito-admin-password \
+        --secret-id uec-dos-api-sfsa-dev-authentication-cognito-admin-password \
         --region $AWS_REGION \
         --query 'SecretString' \
         --output text)
 
 USER_POOL_ID=$(
     aws cognito-idp list-user-pools \
-        --query "UserPools[?Name=='uec-dos-api-sfsa-dev-pool'].Id" \
+        --query "UserPools[?Name=='uec-dos-api-sfsa-dev-authentication-pool'].Id" \
     --region $AWS_REGION \
         --max-results 60 \
         --output text)
