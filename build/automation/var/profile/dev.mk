@@ -17,6 +17,8 @@ CERTIFICATE_DOMAIN := certificate
 
 AUTH_SERVER_PORT := 443
 
+ADD_DEFAULT_COGNITO_USERS := true
+
 # ==============================================================================
 # Infrastructure variables
 
