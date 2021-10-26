@@ -36,7 +36,7 @@ unit-test: # Run project unit tests
 
 build: project-config # Build project
 	make load-cert-to-application
-	docker-run-mvn \
+	make docker-run-mvn \
 		DIR="application/authentication" \
 		CMD="-Dmaven.test.skip=true clean install" \
 		LIB_VOLUME_MOUNT="true" \
