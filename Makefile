@@ -14,20 +14,36 @@ derive-build-tag:
 				sed "s/SS/$$(date --date=$(BUILD_DATE) -u +"%S")/g" | \
 				sed "s/hash/$$(git rev-parse --short HEAD)/g"
 
+compile: project-config # Compile the project to make the target class (binary) files
+	make docker-run-mvn \
+		DIR="application/authentication" \
+		CMD="compile"
+
+coverage-report: # Generate jacoco test coverage reports
+	make load-cert-to-application # FIXME: Remove it !!!
+	make unit-test
+	make docker-run-mvn \
+		DIR="application/authentication" \
+		CMD="jacoco:report"
+
+unit-test: # Run project unit tests
+	make docker-run-mvn \
+		DIR="application/authentication" \
+		CMD="test"
+
 # ==============================================================================
 # Development workflow targets
 
 build: project-config # Build project
-	make \
-	load-cert-to-application \
-	docker-run-mvn \
+	make load-cert-to-application
+	make docker-run-mvn \
 		DIR="application/authentication" \
 		CMD="-Dmaven.test.skip=true clean install" \
 		LIB_VOLUME_MOUNT="true" \
 		PROFILE=local
 	mv \
-		$(PROJECT_DIR)application/authentication/target/service-finder-api-auth-*.jar \
-		$(PROJECT_DIR)build/docker/api/assets/application/dos-service-finder-authentication-api.jar
+		$(PROJECT_DIR)/application/authentication/target/service-finder-api-auth-*.jar \
+		$(PROJECT_DIR)/build/docker/api/assets/application/dos-service-finder-authentication-api.jar
 	make docker-build NAME=api
 
 start: project-start # Start project

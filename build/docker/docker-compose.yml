@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   authentication:
-    image: $AWS_ECR/uec-dos-api/sfa/api:latest
+    image: $DOCKER_REGISTRY/api:latest
     container_name: authentication
     environment:
       COGNITO_USER_POOL_CLIENT_ID: $COGNITO_USER_POOL_CLIENT_ID
@@ -14,11 +14,13 @@ services:
       VERSION: $VERSION
     ports:
       - 9025:443
-    command: ["java", "-jar", "/application/dos-service-finder-authentication-api.jar"]
+    command:
+      ["java", "-jar", "/application/dos-service-finder-authentication-api.jar"]
     networks:
       default:
         aliases:
-          - authentication.sfs.local
+          - authentication.$PROJECT_NAME_SHORT.local
+
 networks:
   default:
-      name: $DOCKER_NETWORK
+    name: $DOCKER_NETWORK

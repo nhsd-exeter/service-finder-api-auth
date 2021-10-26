@@ -151,7 +151,7 @@ devops-copy: ### Copy the DevOps automation toolchain scripts from this codebase
 	}
 	sync && version
 
-devops-update devops-synchronise: ### Update/upgrade the DevOps automation toolchain scripts used by this project - optional: LATEST=true, NO_COMMIT=true
+devops-update devops-synchronise: ### Update/upgrade the DevOps automation toolchain scripts used by this project - optional: SELECT_BY_TAG=true, PERFORM_COMMIT=true
 	function _print() {
 		(
 			set +x
@@ -181,7 +181,7 @@ devops-update devops-synchronise: ### Update/upgrade the DevOps automation toolc
 		git submodule add --force \
 			https://github.com/$(DEVOPS_PROJECT_ORG)/$(DEVOPS_PROJECT_NAME).git \
 			$$(echo $(abspath $(TMP_DIR)/$(DEVOPS_PROJECT_NAME)) | sed "s;$(PROJECT_DIR);;g")
-		if [[ ! "$(LATEST)" =~ ^(true|yes|y|on|1|TRUE|YES|Y|ON)$$ ]]; then
+		if [[ "$(SELECT_BY_TAG)" =~ ^(true|yes|y|on|1|TRUE|YES|Y|ON)$$ ]]; then
 			tag=$$(make _devops-synchronise-select-tag-to-install)
 			cd $(TMP_DIR)/$(DEVOPS_PROJECT_NAME)
 			git checkout $$tag
@@ -283,7 +283,9 @@ devops-update devops-synchronise: ### Update/upgrade the DevOps automation toolc
 		version=$$(make get-variable NAME=DEVOPS_PROJECT_VERSION)
 		if [ 0 -lt $$(git status -s | wc -l) ]; then
 			git add .
-			[ "$(NO_COMMIT)" != true ] && git commit -S -m "Update automation scripts to $$version" || echo "Please, check and commit the changes with the following message: \"Update automation scripts to $$version\""
+			if [[ "$(PERFORM_COMMIT)" =~ ^(true|yes|y|on|1|TRUE|YES|Y|ON)$$ ]]; then
+				git commit -S -m "Update automation scripts to $$version" || echo "Please, check and commit the changes with the following message: \"Update automation scripts to $$version\""
+			fi
 		fi
 	}
 	if [ -z "$(__DEVOPS_SYNCHRONISE)" ]; then
@@ -304,7 +306,7 @@ _devops-project-update-variables: ### Set up project variables - mandatory: DIR=
 	pns=$$(cat $$file | grep "PROJECT_NAME_SHORT = " | sed "s/PROJECT_NAME_SHORT = //")
 	pdn=$$(cat $$file | grep "PROJECT_DISPLAY_NAME = " | sed "s/PROJECT_DISPLAY_NAME = //")
 	if [[ ! "$(ALWAYS_ASK)" =~ ^(true|yes|y|on|1|TRUE|YES|Y|ON)$$ ]]; then
-		if [ "$$pg" != 'uec/tools' ] && [ "$$pgs" != 'uec-tools' ] && [ "$$pn" != 'make-devops' ] && [ "$$pns" != 'mdo' ] && [ "$$pdn" != 'Make DevOps' ]; then
+		if [ "$$pg" != '[uec/dos-api]' ] && [ "$$pgs" != '[uec-dos-api]' ] && [ "$$pn" != '[project-name]' ] && [ "$$pns" != '[pns]' ] && [ "$$pdn" != '[Project Name]' ]; then
 			exit 0
 		fi
 	fi
@@ -546,7 +548,11 @@ DEVOPS_PROJECT_ORG := nhsd-exeter
 DEVOPS_PROJECT_NAME := make-devops
 DEVOPS_PROJECT_DIR := $(abspath $(lastword $(MAKEFILE_LIST))/..)
 ifeq (true, $(shell [ ! -f $(PROJECT_DIR)/build/automation/VERSION ] && echo true))
-DEVOPS_PROJECT_VERSION := $(or $(shell git tag --points-at HEAD 2> /dev/null | sed "s/v//g" ||:), $(shell echo $$(git show -s --format=%cd --date=format:%Y%m%d%H%M%S 2> /dev/null ||:)-$$(git rev-parse --short HEAD 2> /dev/null ||:)))
+ifeq (true, $(shell [ -n "$$(git tag --points-at HEAD 2> /dev/null)" ] && echo true))
+DEVOPS_PROJECT_VERSION := $(shell echo $$(git show -s --format=%cd --date=format:%Y%m%d%H%M%S 2> /dev/null ||:)-$$(git rev-parse --short HEAD 2> /dev/null ||:)-$(shell git tag --points-at HEAD 2> /dev/null | sed "s/v//g" ||:))
+else
+DEVOPS_PROJECT_VERSION := $(shell echo $$(git show -s --format=%cd --date=format:%Y%m%d%H%M%S 2> /dev/null ||:)-$$(git rev-parse --short HEAD 2> /dev/null ||:)-snapshot)
+endif
 else
 DEVOPS_PROJECT_VERSION := $(shell cat $(PROJECT_DIR)/build/automation/VERSION)
 endif
@@ -585,15 +591,16 @@ INFRASTRUCTURE_DIR_REL = $(shell echo $(INFRASTRUCTURE_DIR) | sed "s;$(PROJECT_D
 JQ_DIR_REL := $(shell echo $(abspath $(LIB_DIR)/jq) | sed "s;$(PROJECT_DIR);;g")
 
 GIT_BRANCH_PATTERN_MAIN := ^(master|develop)$$
-GIT_BRANCH_PATTERN_PREFIX := ^(task|spike|bugfix|hotfix|fix|test|release|migration)
-GIT_BRANCH_PATTERN_SUFFIX := [A-Za-z]{2,5}-([0-9]{1,5}|X{1,5})_[A-Za-z0-9_]{4,64}$$
-GIT_BRANCH_PATTERN_ADDITIONAL := ^task/Update_automation_scripts$$|^task/Update_versions$$|^task/Refactor$$
+GIT_BRANCH_PATTERN_PREFIX := ^(task|spike|automation|test|bugfix|hotfix|fix|release|migration)
+GIT_BRANCH_PATTERN_SUFFIX := ([A-Z]{2,5}-([0-9]{1,5}|X{1,5})_[A-Z][a-z]+_[A-Za-z0-9]+_[A-Za-z0-9_]+)$$
+GIT_BRANCH_PATTERN_ADDITIONAL := ^(task/Update_(automation_scripts|dependencies|documentation|tests|versions)|task/Refactor|devops/[A-Z][a-z]+_[A-Za-z0-9_]+_[A-Za-z0-9_]+|alignment/[A-Z][a-z]+_[A-Za-z0-9_]+_[A-Za-z0-9_]+)$$
 GIT_BRANCH_PATTERN := $(GIT_BRANCH_PATTERN_MAIN)|$(GIT_BRANCH_PATTERN_PREFIX)/$(GIT_BRANCH_PATTERN_SUFFIX)|$(GIT_BRANCH_PATTERN_ADDITIONAL)
-GIT_TAG_PATTERN := [0-9]{12,14}-[a-z]{3,10}
 GIT_BRANCH_MAX_LENGTH := 72
+GIT_TAG_PATTERN := [0-9]{12,14}-[a-z]{3,10}
 GIT_COMMIT_MESSAGE_PATTERN_MAIN := ^(([A-Z]{2,5}-([0-9]{1,5}|X{1,5}) [A-Z][a-z]+ [[:print:]]+ [[:print:]]+[^!?,.:;=-]|Update (automation scripts|dependencies|documentation|tests|versions))([[:print:]][^!?,.:;=-])*)$$|^((Update|Refactor|Automate|Test|Fix|Release|Migrate) [[:print:]]+ [[:print:]]+[^!?,.:;=-])$$
 GIT_COMMIT_MESSAGE_PATTERN_ADDITIONAL := ^([A-Z]{2,5}-([0-9]{1,5}|X{1,5}) [A-Z][a-z]+ [[:print:]]+ [[:print:]]+[^!?,.:;=-]|[A-Z][a-z]+ [[:print:]]+ [[:print:]]+[^!?,.:;=-])$$|([A-Z][[:print:]]+ \[ci:[[:blank:]]?[,a-z0-9-]+\])
 GIT_COMMIT_MESSAGE_MAX_LENGTH := 72
+GIT_PULL_REQUEST_TITLE_MAX_LENGTH := $(shell echo $$(( $(GIT_COMMIT_MESSAGE_MAX_LENGTH) + 12 )))
 
 BUILD_DATE := $(or $(BUILD_DATE), $(shell date -u +"%Y-%m-%dT%H:%M:%S%z"))
 BUILD_TIMESTAMP := $(shell date --date=$(BUILD_DATE) -u +"%Y%m%d%H%M%S" 2> /dev/null)
