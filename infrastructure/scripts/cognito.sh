@@ -4,19 +4,19 @@ set -e
 [ -z "$PROFILE" ] && PROFILE="nonprod"
 
 COGNITO_GROUPS=(FUZZY_API_ACCESS POSTCODE_API_ACCESS)
-COGNITO_ADMIN_USER="api-authentication-admin@nhs.net"
+COGNITO_ADMIN_USER="service-finder-admin@nhs.net"
 COGNITO_PROFILE=$PROFILE
 
 COGNITO_ADMIN_PASSWORD=$(
     aws secretsmanager get-secret-value \
-        --secret-id api-authentication-$COGNITO_PROFILE-cognito-admin-password \
+        --secret-id sf-authentication-$COGNITO_PROFILE-cognito-admin-password \
         --region $AWS_REGION \
         --query 'SecretString' \
         --output text)
 
 USER_POOL_ID=$(
     aws cognito-idp list-user-pools \
-        --query "UserPools[?Name=='api-authentication-$COGNITO_PROFILE-pool'].Id" \
+        --query "UserPools[?Name=='sf-authentication-$COGNITO_PROFILE-pool'].Id" \
     --region $AWS_REGION \
         --max-results 60 \
         --output text)

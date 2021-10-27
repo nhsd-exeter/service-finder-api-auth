@@ -74,6 +74,15 @@ provision: # Provision environment - mandatory: PROFILE=[name]
 plan: # Plan environment - mandatory: PROFILE=[name]
 	make terraform-plan STACK=$(INFRASTRUCTURE_STACKS) PROFILE=$(PROFILE)
 
+project-populate-cognito: ## Populate cognito - requried: ADD_DEFAULT_COGNITO_USERS,  optional: PROFILE=dev|AWS_ROLE=Developer
+	if $(ADD_DEFAULT_COGNITO_USERS); then \
+		eval "$$(make aws-assume-role-export-variables)"
+		$(PROJECT_DIR)/infrastructure/scripts/cognito.sh
+	else
+		echo 'Default users already added to pool';
+	fi
+
+
 clean: # Clean up project
 
 # ==============================================================================
