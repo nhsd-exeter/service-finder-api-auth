@@ -19,6 +19,7 @@
     <java.version>16</java.version>
     <maven.compiler.source>16</maven.compiler.source>
     <maven.compiler.target>16</maven.compiler.target>
+    <jacoco-maven-plugin.version>0.8.6</jacoco-maven-plugin.version>
   </properties>
 
   <dependencies>
@@ -85,7 +86,18 @@
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.8.6</version>
+        <version>${jacoco-maven-plugin.version}</version>
+        <configuration>
+          <excludes>
+            <exclude>**/config/*.*</exclude>
+            <exclude>**/interceptor/*.*</exclude>
+            <exclude>**/model/**/*.*</exclude>
+            <exclude>**/exception/*.class</exclude>
+            <exclude>**/Constants.class</exclude>
+            <exclude>**/ServiceFinderAuthenticationAPI.class</exclude>
+            <exclude>**/test-classes/**/*.class</exclude>
+          </excludes>
+        </configuration>
         <executions>
           <execution>
             <goals>
@@ -98,6 +110,32 @@
             <goals>
               <goal>report</goal>
             </goals>
+          </execution>
+          <execution>
+            <id>jacoco-check</id>
+            <phase>test</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <rule>
+                  <element>PACKAGE</element>
+                  <excludes>
+                    <exclude>*config</exclude>
+                    <exclude>*model</exclude>
+                    <exclude>*filter</exclude>
+                  </excludes>
+                  <limits>
+                    <limit>
+                      <counter>METHOD</counter>
+                      <value>COVEREDRATIO</value>
+                      <minimum>80%</minimum>
+                    </limit>
+                  </limits>
+                </rule>
+              </rules>
+            </configuration>
           </execution>
         </executions>
       </plugin>

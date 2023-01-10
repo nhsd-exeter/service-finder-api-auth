@@ -1,4 +1,4 @@
-package uk.nhs.digital.uec.api.util;
+package uk.nhs.digital.uec.api.utils;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static uk.nhs.digital.uec.api.utils.Utils.calculateSecretHash;
