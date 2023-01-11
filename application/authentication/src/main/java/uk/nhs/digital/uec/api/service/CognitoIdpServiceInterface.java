@@ -4,7 +4,7 @@ import uk.nhs.digital.uec.api.exception.UnauthorisedException;
 import uk.nhs.digital.uec.api.model.AuthToken;
 import uk.nhs.digital.uec.api.model.Credential;
 
-public interface CognitoIdpService {
+public interface CognitoIdpServiceInterface {
 
   public static final String SECRET_HASH = "SECRET_HASH";
 
@@ -15,4 +15,5 @@ public interface CognitoIdpService {
    * @return AuthToken object
    */
   AuthToken authenticate(Credential credential) throws UnauthorisedException;
+  AuthToken authenticate(String refreshToken, String email) throws UnauthorisedException;
 }

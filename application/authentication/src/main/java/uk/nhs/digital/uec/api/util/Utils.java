@@ -1,4 +1,4 @@
-package uk.nhs.digital.uec.api.utils;
+package uk.nhs.digital.uec.api.util;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.codec.digest.HmacAlgorithms.HMAC_SHA_256;
