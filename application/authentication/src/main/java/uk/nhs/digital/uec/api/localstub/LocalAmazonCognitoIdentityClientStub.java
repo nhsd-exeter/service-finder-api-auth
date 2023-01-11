@@ -1,21 +1,22 @@
 package uk.nhs.digital.uec.api.localstub;
 
-import static uk.nhs.digital.uec.api.utils.Constants.COGNITO_GROUP;
-import static uk.nhs.digital.uec.api.utils.Constants.PASSWORD;
-import static uk.nhs.digital.uec.api.utils.Constants.USERNAME;
-
 import com.amazonaws.services.cognitoidp.AbstractAWSCognitoIdentityProvider;
 import com.amazonaws.services.cognitoidp.model.AWSCognitoIdentityProviderException;
 import com.amazonaws.services.cognitoidp.model.AuthenticationResultType;
 import com.amazonaws.services.cognitoidp.model.InitiateAuthRequest;
 import com.amazonaws.services.cognitoidp.model.InitiateAuthResult;
+
+import static uk.nhs.digital.uec.api.util.Constants.COGNITO_GROUP;
+import static uk.nhs.digital.uec.api.util.Constants.PASSWORD;
+import static uk.nhs.digital.uec.api.util.Constants.USERNAME;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
-import uk.nhs.digital.uec.api.utils.LocalJwtFactory;
+import uk.nhs.digital.uec.api.util.LocalJwtFactory;
 
 @Slf4j
 public class LocalAmazonCognitoIdentityClientStub extends AbstractAWSCognitoIdentityProvider {
@@ -25,6 +26,7 @@ public class LocalAmazonCognitoIdentityClientStub extends AbstractAWSCognitoIden
   public LocalAmazonCognitoIdentityClientStub() {
     identityProviderIdPasswordMap = new HashMap<>();
     identityProviderIdPasswordMap.put("admin@nhs.net", "password");
+    identityProviderIdPasswordMap.put("service-finder-admin@nhs.net", "mock-auth-pass");
   }
 
   @Override
@@ -36,7 +38,7 @@ public class LocalAmazonCognitoIdentityClientStub extends AbstractAWSCognitoIden
     log.info("Login attempted using credentials : " + inputUserName + "/" + inputPassword);
 
     if (validPassword == null || !validPassword.equals(inputPassword)) {
-      log.info("Attempted to login using invalid credentials");
+      log.error("Attempted to login using invalid credentials");
       throw new AWSCognitoIdentityProviderException("401 - Unauthorised");
     } else {
       return initiateAuthRequest(inputUserName);

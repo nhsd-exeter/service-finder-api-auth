@@ -1,12 +1,12 @@
-package uk.nhs.digital.uec.api.utils;
+package uk.nhs.digital.uec.api.util;
 
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 
+import static uk.nhs.digital.uec.api.util.Constants.COGNITO_GROUPS;
+
 import java.util.Date;
 import java.util.Set;
-
-import static uk.nhs.digital.uec.api.utils.Constants.COGNITO_GROUPS;
 
 public class LocalJwtFactory {
   public String createToken(

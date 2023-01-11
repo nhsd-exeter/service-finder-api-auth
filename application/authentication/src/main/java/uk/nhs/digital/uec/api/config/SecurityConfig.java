@@ -1,7 +1,7 @@
 package uk.nhs.digital.uec.api.config;
 
-import static uk.nhs.digital.uec.api.utils.Constants.HEALTH_CHECK_READINESS_URL;
-import static uk.nhs.digital.uec.api.utils.Constants.LOGIN_URL;
+import static uk.nhs.digital.uec.api.util.Constants.HEALTH_CHECK_READINESS_URL;
+import static uk.nhs.digital.uec.api.util.Constants.LOGIN_URL;
 
 import java.util.Arrays;
 import java.util.List;
