@@ -3,7 +3,7 @@
 # to fail. The current workaround is to delete your user pool and re-run Terraform
 # again. When this gets to production it will be created from scratch so I don't
 # foresee any issues.
-resource "aws_cognito_user_pool" "pool" {
+resource "aws_cognito_user_pool" "sf_auth_pool" {
   name                     = var.cognito_pool_name
   username_attributes      = ["email"]
   auto_verified_attributes = ["email"]
@@ -28,9 +28,9 @@ resource "aws_cognito_user_pool" "pool" {
 }
 
 # Note: when no read_attributes are specified, all are readable by default
-resource "aws_cognito_user_pool_client" "client" {
+resource "aws_cognito_user_pool_client" "sf_auth_client" {
   name                   = "auth-pool-client"
-  user_pool_id           = aws_cognito_user_pool.pool.id
+  user_pool_id           = aws_cognito_user_pool.sf_auth_pool.id
   explicit_auth_flows    = ["USER_PASSWORD_AUTH"]
   generate_secret        = true
   refresh_token_validity = 1
