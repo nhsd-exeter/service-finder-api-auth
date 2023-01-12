@@ -70,7 +70,6 @@
       <artifactId>spring-boot-starter-jersey</artifactId>
     </dependency>
   </dependencies>
-
   <build>
     <plugins>
       <plugin>
@@ -157,7 +156,29 @@
           </execution>
         </executions>
       </plugin>
-
+      <plugin>
+        <groupId>org.owasp</groupId>
+        <artifactId>dependency-check-maven</artifactId>
+        <version>${dependency-check-maven.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <!-- .Disable Net content-->
+          <ossindexAnalyzerEnabled>false</ossindexAnalyzerEnabled>
+          <cveStartYear>2022</cveStartYear>
+          <failBuildOnCVSS>10</failBuildOnCVSS>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.sonarsource.scanner.maven</groupId>
+        <artifactId>sonar-maven-plugin</artifactId>
+        <version>3.7.0.1746</version>
+      </plugin>
     </plugins>
   </build>
 
