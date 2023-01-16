@@ -35,14 +35,14 @@ pipeline {
     stage("Plan Infrastructure") {
       steps {
         script {
-          sh "make plan PROFILE=${env.PROFILE}"
+          sh "make project-plan-deployment PROFILE=${env.PROFILE}"
         }
       }
     }
     stage("Provision Infrastructure") {
       steps {
         script {
-          sh "make provision PROFILE=${env.PROFILE}"
+          sh "make  project-infrastructure-set-up PROFILE=${env.PROFILE}"
         }
       }
     }
