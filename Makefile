@@ -62,19 +62,53 @@ test: # Test project
 		PROFILE=local \
 		VARS_FILE=$(VAR_DIR)/profile/local.mk
 
-push: # Push project artefacts to the registry
-	make docker-push NAME=api
 
-deploy: # Deploy artefacts - mandatory: PROFILE=[name]
-	make project-deploy STACK=application PROFILE=$(PROFILE)
+project-plan-deployment: ## Display what will occur during the deployment - optional: PROFILE
+	eval "$$(make aws-assume-role-export-variables)"
+	make terraform-plan STACK=$(INFRASTRUCTURE_STACKS) PROFILE=$(PROFILE)
+	sleep $(SLEEP_AFTER_PLAN)
 
-provision: # Provision environment - mandatory: PROFILE=[name]
+project-plan-deployment-base: ## Display what will occur during the deployment - optional: PROFILE
+	make pipeline-print-variables PROFILE=base-$(PROFILE)
+	make terraform-plan PROFILE=base-$(PROFILE)
+	sleep $(SLEEP_AFTER_PLAN)
+
+project-plan-deployment-destroy: ## Display what will occur during the deployment - optional: PROFILE
+	make terraform-plan OPTS="-destroy"
+	sleep $(SLEEP_AFTER_PLAN)
+
+project-populate-cognito: ## Populate cognito - optional: PROFILE=nonprod|prod,AWS_ROLE=Developer
+	eval "$$(make aws-assume-role-export-variables)"
+	$(PROJECT_DIR)/infrastructure/scripts/cognito.sh
+
+project-infrastructure-set-up-base: ## Set up infrastructure - optional: AWS_ROLE=Developer|jenkins_assume_role
+	eval "$$(make aws-assume-role-export-variables)"
+	make terraform-apply-auto-approve PROFILE=base-$(PROFILE)
+
+project-infrastructure-set-up: ## Set up infrastructure - optional: AWS_ROLE=Developer|jenkins_assume_role
 	make terraform-apply-auto-approve STACK=$(INFRASTRUCTURE_STACKS) PROFILE=$(PROFILE)
 
-plan: # Plan environment - mandatory: PROFILE=[name]
-	make terraform-plan STACK=$(INFRASTRUCTURE_STACKS) PROFILE=$(PROFILE)
+project-infrastructure-tear-down: ## Tear down infrastructure - optional: PROFILE=nonprod|prod,AWS_ROLE=Developer|jenkins_assume_role
+	make terraform-destroy-auto-approve STACK=$(INFRASTRUCTURE_STACKS) PROFILE=$(PROFILE)
 
-clean: # Clean up project
+project-tear-down: ## Tear down environment - optional: PROFILE=nonprod|prod,AWS_ROLE=Developer|jenkins_assume_role
+	make project-undeploy
+	make project-infrastructure-tear-down
+	make terraform-delete-states
+
+project-push-image-api: ## Push the docker images (API) to the ECR
+	make docker-login
+	make docker-push NAME=api VERSION=${VERSION}
+
+project-deploy: ### Deploy application stack to the Kubernetes cluster - mandatory: STACK|STACKS|DEPLOYMENT_STACKS=[comma-separated names],PROFILE=[profile name]
+	eval "$$(make aws-assume-role-export-variables)"
+	eval "$$(make project-populate-application-variables)"
+	make project-deploy STACK=application PROFILE=$(PROFILE)
+
+project-clean: # Clean up project
+	make docker-image-clean-project-repo-version PROJECT_REPO=uec-dos-api/saa/api VERSION=$(VERSION)
+	docker network rm $(DOCKER_NETWORK) 2> /dev/null ||:
+
 
 # ==============================================================================
 # Supporting targets

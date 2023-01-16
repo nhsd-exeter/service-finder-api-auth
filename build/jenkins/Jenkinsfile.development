@@ -29,7 +29,7 @@ pipeline {
     stage("Plan Infrastructure") {
       steps {
         script {
-          sh "make plan PROFILE=${env.PROFILE}"
+          sh "make project-plan-deployment PROFILE=${env.PROFILE}"
         }
       }
     }
@@ -65,7 +65,7 @@ pipeline {
     stage('Push API Image to ECR') {
       steps {
         script {
-          sh "make push VERSION=${env.PROJECT_BUILD_TAG}"
+          sh "make project-push-image-api VERSION=${env.PROJECT_BUILD_TAG}"
         }
       }
     }
@@ -77,5 +77,4 @@ pipeline {
       }
     }
   }
-
 }

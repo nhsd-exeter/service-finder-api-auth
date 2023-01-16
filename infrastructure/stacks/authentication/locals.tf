@@ -5,6 +5,8 @@ locals {
     "Service"     = "service-finder-authentication"
     "Product"     = "service-finder-authentication"
     "Environment" = var.profile
+    "tag"         = "uec-sf"
+    "uc_name"     = "UECSF"
   }
 
   sf_cognito = {
