@@ -22,7 +22,7 @@ AUTH_SERVER_PORT := 443
 # Infrastructure variables
 
 DEPLOYMENT_STACKS := application
-INFRASTRUCTURE_STACKS := authentication
+INFRASTRUCTURE_STACKS := authentication,account
 
 TF_VAR_service_prefix := sf-authentication-$(PROFILE)
 TF_VAR_service_prefix_short := sfa-$(PROFILE)
@@ -33,7 +33,7 @@ TF_VAR_ui_main_url := https://$(TF_VAR_sf_domain_name)
 
 TF_VAR_base_service_prefix = service-finder-nonprod
 TF_VAR_ses_domain_identity := $(TF_VAR_base_service_prefix).$(TF_VAR_platform_zone)
-TF_VAR_email_to_go_to_s3 := info@$(TF_VAR_ses_domain_identity)
+TF_VAR_email_to_go_to_s3 := info@$(TF_VAR_sf_domain_name)
 TF_VAR_send_email_logging_level := INFO
 TF_VAR_service_finder_verification_redirect := $(TF_VAR_sf_domain_name) #To remove after new email address creation
 

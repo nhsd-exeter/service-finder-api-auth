@@ -10,6 +10,13 @@ resource "aws_cognito_user_pool" "pool" {
   user_pool_add_ons {
     advanced_security_mode = "OFF"
   }
+  email_configuration {
+    source_arn = "arn:aws:ses:${var.ireland_region}:${var.aws_account}:identity/${var.email_address}"
+    #source_arn = "arn:aws:ses:${var.london_region}:${var.aws_account}:identity/${var.email_address}"
+
+    email_sending_account = "DEVELOPER"
+  }
+
 
   password_policy {
     minimum_length                   = 8
@@ -20,8 +27,8 @@ resource "aws_cognito_user_pool" "pool" {
     temporary_password_validity_days = 7
   }
 
-  username_configuration {
-    case_sensitive = false
+  lambda_config {
+    custom_message = aws_lambda_function.custom_registration_verification_email.arn
   }
 
   tags = var.tags
