@@ -65,7 +65,7 @@ pipeline {
     stage('Push API Image to ECR') {
       steps {
         script {
-          sh "make project-push-image-api VERSION=${env.PROJECT_BUILD_TAG}"
+          sh "make project-push-image VERSION=${env.PROJECT_BUILD_TAG}"
         }
       }
     }

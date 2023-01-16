@@ -36,11 +36,30 @@ unit-test: # Run project unit tests
 
 build: project-config # Build project
 	make load-cert-to-application
-	make docker-run-mvn \
-		DIR="application/authentication" \
-		CMD="-Dmaven.test.skip=true clean install" \
-		LIB_VOLUME_MOUNT="true" \
-		PROFILE=local
+	if [ $(PROFILE) == 'local' ]
+	then
+		make docker-run-mvn \
+			DIR="application/authentication" \
+			CMD="-Dmaven.test.skip=true -Ddependency-check.skip=true clean install" \
+			LIB_VOLUME_MOUNT="true"
+	else
+		make docker-run-mvn \
+			DIR="application/authentication" \
+			CMD="-Ddependency-check.skip=true clean install \
+			-Dsonar.verbose=true \
+			-Dsonar.host.url='https://sonarcloud.io' \
+			-Dsonar.organization='nhsd-exeter' \
+			-Dsonar.projectKey='uec-dos-api-sfsa' \
+			-Dsonar.java.binaries=target/classes \
+			-Dsonar.projectName='service-finder-api-auth' \
+			-Dsonar.login='$$(make secret-fetch NAME=service-finder-sonar-pass | jq .SONAR_HOST_TOKEN | tr -d '"' || exit 1)' \
+			-Dsonar.sourceEncoding='UTF-8' \
+			-Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco \
+			-Dsonar.exclusions='src/main/java/**/config/*.*,src/main/java/**/model/*.*,src/main/java/**/exception/*.*,src/test/**/*.*,src/main/java/**/filter/*.*,src/main/java/**/ServiceFinderAuthenticationAPI.*' \
+			sonar:sonar" \
+			LIB_VOLUME_MOUNT="true"
+	fi
+
 	mv \
 		$(PROJECT_DIR)/application/authentication/target/service-finder-api-auth-*.jar \
 		$(PROJECT_DIR)/build/docker/api/assets/application/dos-service-finder-authentication-api.jar
@@ -96,13 +115,10 @@ project-tear-down: ## Tear down environment - optional: PROFILE=nonprod|prod,AWS
 	make project-infrastructure-tear-down
 	make terraform-delete-states
 
-project-push-image-api: ## Push the docker images (API) to the ECR
-	make docker-login
+project-push-image: ## Push the docker images (API) to the ECR
 	make docker-push NAME=api VERSION=${VERSION}
 
-project-deploy: ### Deploy application stack to the Kubernetes cluster - mandatory: STACK|STACKS|DEPLOYMENT_STACKS=[comma-separated names],PROFILE=[profile name]
-	eval "$$(make aws-assume-role-export-variables)"
-	eval "$$(make project-populate-application-variables)"
+deploy: # Deploy artefacts - mandatory: PROFILE=[name]
 	make project-deploy STACK=application PROFILE=$(PROFILE)
 
 project-clean: # Clean up project
