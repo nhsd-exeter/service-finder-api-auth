@@ -1,28 +1,15 @@
-resource "aws_ses_domain_identity" "primary" {
-  domain = data.aws_route53_zone.zone.name
+module "ses" {
+  source             = "../../modules/ses"
+  aws_account        = var.aws_account_id
+  aws_region         = local.sf_ses["aws_region"]
+  service_prefix     = var.base_service_prefix
+  route53_zone_id    = data.terraform_remote_state.route53.outputs.dns_zone_id
+  dmarc_rua          = local.sf_ses["dmarc_rua"]
+  domain_name        = local.sf_ses["domain_name"]
+  s3_email_recipient = local.sf_ses["s3_email"]
+  receive_s3_bucket  = local.sf_ses["receive_s3_bucket"]
+  receive_s3_prefix  = local.sf_ses["receive_s3_prefix"]
+  ses_rule_set       = local.sf_ses["ses_rule_set"]
+  tags               = local.standard_tags
 }
 
-resource "aws_route53_record" "ses_verif" {
-  zone_id = data.aws_route53_zone.zone.zone_id
-  name    = "_amazonses.${aws_ses_domain_identity.primary.id}"
-  type    = "TXT"
-  ttl     = "600"
-  records = [aws_ses_domain_identity.primary.verification_token]
-}
-
-resource "aws_ses_domain_identity_verification" "ses_verif" {
-  domain = aws_ses_domain_identity.primary.id
-  depends_on = [aws_route53_record.ses_verif]
-}
-
-resource "aws_route53_record" "email" {
-  zone_id = data.aws_route53_zone.zone.zone_id
-  name    = data.aws_route53_zone.zone.name
-  type    = "MX"
-  ttl     = "600"
-  records = ["10 inbound-smtp.${var.ireland_region}.amazonaws.com"]
-}
-
-resource "aws_ses_email_identity" "email" {
-  email = var.email_to_go_to_s3
-}
