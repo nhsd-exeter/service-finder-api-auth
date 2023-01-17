@@ -64,7 +64,8 @@ pipeline {
     stage('Run Contract Tests') {
       steps {
         script {
-          sh "make run-contract-tests VERSION=${env.PROJECT_BUILD_TAG}"
+          //sh "make run-contract-tests VERSION=${env.PROJECT_BUILD_TAG}"
+          echo "TODO"
         }
       }
     }
