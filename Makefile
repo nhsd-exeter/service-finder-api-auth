@@ -2,6 +2,11 @@ PROJECT_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 include $(abspath $(PROJECT_DIR)/build/automation/init.mk)
 DOCKER_REGISTRY_LIVE = $(DOCKER_REGISTRY)/prod
 
+prepare: ## Prepare environment
+	make \
+		git-config \
+		docker-config
+
 derive-build-tag:
 	dir=$$(make _docker-get-dir NAME=api)
 	echo $$(cat $$dir/VERSION) | \
@@ -30,6 +35,13 @@ unit-test: # Run project unit tests
 	make docker-run-mvn \
 		DIR="application/authentication" \
 		CMD="test"
+
+run-contract-tests:
+	make start PROFILE=local VERSION=$(VERSION)
+	cd test/contract
+	make run-contract
+	cd ../../
+	make stop
 
 # ==============================================================================
 # Development workflow targets
@@ -64,6 +76,18 @@ build: project-config # Build project
 		$(PROJECT_DIR)/application/authentication/target/service-finder-api-auth-*.jar \
 		$(PROJECT_DIR)/build/docker/api/assets/application/dos-service-finder-authentication-api.jar
 	make docker-build NAME=api
+
+scan:
+	if [ ! -d $(PROJECT_DIR)/reports ]; then
+		mkdir $(PROJECT_DIR)/reports
+	fi
+
+	make docker-run-mvn \
+		DIR="application/authentication" \
+		CMD="dependency-check:check"
+	mv \
+		$(PROJECT_DIR)/application/authentication/target/dependency-check-report.html \
+		$(PROJECT_DIR)/reports/service-finder-authentication-dependency-report.html
 
 start: project-start # Start project
 

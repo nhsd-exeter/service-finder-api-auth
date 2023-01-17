@@ -3,17 +3,17 @@ pipeline {
     Description: Deployment pipeline
    */
 
-  agent { label "jenkins-slave" }
+  agent { label 'jenkins-slave' }
 
   options {
-    buildDiscarder(logRotator(daysToKeepStr: "7", numToKeepStr: "13"))
+    buildDiscarder(logRotator(daysToKeepStr: '7', numToKeepStr: '13'))
     disableConcurrentBuilds()
     parallelsAlwaysFailFast()
-    timeout(time: 30, unit: "MINUTES")
+    timeout(time: 30, unit: 'MINUTES')
   }
 
   environment {
-    PROFILE = "dev"
+    PROFILE = 'dev'
   }
 
   parameters {
@@ -24,7 +24,7 @@ pipeline {
         )
   }
 
-  stages {
+    stages {
     stage('Show Variables') {
       steps {
         script {
@@ -32,41 +32,74 @@ pipeline {
         }
       }
     }
-    stage("Plan Infrastructure") {
+    stage('Prepare') {
+      steps {
+        script {
+          sh 'make prepare'
+        }
+      }
+    }
+    stage('Check Py Lib Folder') {
+      steps {
+        script {
+          sh 'make create-lambda-deploy-dir'
+        }
+      }
+    }
+    stage('Plan Infrastructure') {
       steps {
         script {
           sh "make project-plan-deployment PROFILE=${env.PROFILE}"
         }
       }
     }
-    stage("Provision Infrastructure") {
+    stage('Provision Base Infrastructure') {
       steps {
         script {
           sh "make  project-infrastructure-set-up PROFILE=${env.PROFILE}"
         }
       }
     }
-    stage("Deploy API") {
-      steps {
-        script {
-          sh "make deploy PROFILE=${env.PROFILE} IMAGE_TAG=${IMAGE_TAG}"
-        }
-      }
-    }
-    stage("Monitor Deployment") {
-      steps {
-        script {
-          echo "to do"
-        }
-      }
-    }
-    stage("Smoke Tests") {
-      steps {
-        script {
-          echo "to do"
-        }
-      }
-    }
-  }
 
+    stage('Deploy API') {
+      steps {
+        script {
+          sh "make deploy PROFILE=${env.PROFILE} API_IMAGE_TAG=${IMAGE_TAG}"
+        }
+      }
+    }
+    stage('Monitor Deployment') {
+      steps {
+        script {
+          sh 'make k8s-check-deployment-of-replica-sets'
+        }
+      }
+    }
+    stage('Monitor Route53 Connection') {
+      steps {
+        script {
+          sh 'make monitor-r53-connection'
+        }
+      }
+    }
+    stage('Run Service ETL') {
+      steps {
+        script {
+          sh 'make apply-data-changes'
+        }
+      }
+    }
+    stage('Smoke Tests') {
+      steps {
+        script {
+          sh "make run-smoke-test PROFILE=${env.PROFILE} API_IMAGE_TAG=${IMAGE_TAG}"
+        }
+      }
+    }
+    }
+  post {
+    always { sh 'make clean' }
+    success { sh 'make pipeline-on-success' }
+    failure { sh 'make pipeline-on-failure' }
+  }
 }
