@@ -145,8 +145,8 @@ project-push-image: ## Push the docker images (API) to the ECR
 deploy: # Deploy artefacts - mandatory: PROFILE=[name]
 	make project-deploy STACK=application PROFILE=$(PROFILE)
 
-project-clean: # Clean up project
-	make docker-image-clean-project-repo-version PROJECT_REPO=uec-dos-api/saa/api VERSION=$(VERSION)
+clean: # Clean up project
+	make stop
 	docker network rm $(DOCKER_NETWORK) 2> /dev/null ||:
 
 
@@ -261,6 +261,13 @@ pipeline-create-resources: ## Create all the pipeline deployment supporting reso
 	#make aws-codeartifact-setup REPOSITORY_NAME=$(PROJECT_GROUP_SHORT)
 
 # ==============================================================================
+# --------------------------------------
+
+pipeline-on-success:
+	echo TODO: $(@)
+
+pipeline-on-failure:
+	echo TODO: $(@)
 
 .SILENT: \
 	derive-build-tag
