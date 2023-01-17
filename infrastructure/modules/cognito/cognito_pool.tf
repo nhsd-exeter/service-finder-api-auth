@@ -4,18 +4,18 @@
 # again. When this gets to production it will be created from scratch so I don't
 # foresee any issues.
 resource "aws_cognito_user_pool" "pool" {
-  name                     = var.cognito_pool_name
+  name = var.cognito_pool_name
+
   username_attributes      = ["email"]
   auto_verified_attributes = ["email"]
   user_pool_add_ons {
     advanced_security_mode = "OFF"
   }
-  email_configuration {
+  /* email_configuration {
     source_arn = "arn:aws:ses:${var.ireland_region}:${var.aws_account}:identity/${var.email_address}"
-    #source_arn = "arn:aws:ses:${var.london_region}:${var.aws_account}:identity/${var.email_address}"
-
     email_sending_account = "DEVELOPER"
   }
+  */
 
 
   password_policy {
@@ -26,6 +26,7 @@ resource "aws_cognito_user_pool" "pool" {
     require_uppercase                = false
     temporary_password_validity_days = 7
   }
+
 
   lambda_config {
     custom_message = aws_lambda_function.custom_registration_verification_email.arn

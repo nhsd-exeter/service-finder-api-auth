@@ -33,6 +33,6 @@ variable "ui_main_url" {
   description = "this is mail url"
 }
 
-variable "service_finder_verification_redirect"{
+variable "service_finder_verification_redirect" {
   description = "Temp link to redirect users"
 }
