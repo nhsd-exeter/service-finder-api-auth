@@ -26,9 +26,11 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+
+
 import uk.nhs.digital.uec.api.common.mail.MailClient;
 import uk.nhs.digital.uec.api.common.mail.Renderer;
-import uk.nhs.digital.uec.api.common.mail.properties.MailProperties;
+import uk.nhs.digital.uec.api.config.MailProperties;
 import uk.nhs.digital.uec.api.domain.ApprovalMessage;
 import uk.nhs.digital.uec.api.domain.PasswordResetMessage;
 import uk.nhs.digital.uec.api.domain.User;

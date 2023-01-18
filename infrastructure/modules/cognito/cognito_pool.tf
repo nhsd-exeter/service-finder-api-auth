@@ -11,12 +11,10 @@ resource "aws_cognito_user_pool" "pool" {
   user_pool_add_ons {
     advanced_security_mode = "OFF"
   }
-  /* email_configuration {
-    source_arn = "arn:aws:ses:${var.ireland_region}:${var.aws_account}:identity/${var.email_address}"
+  email_configuration {
+    source_arn            = "arn:aws:ses:${var.ireland_region}:${var.aws_account}:identity/${var.email_address}"
     email_sending_account = "DEVELOPER"
   }
-  */
-
 
   password_policy {
     minimum_length                   = 8
