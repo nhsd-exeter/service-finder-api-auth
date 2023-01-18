@@ -13,9 +13,9 @@ public class RefreshTokenService {
 
     protected static final String REFRESH_PATH = "/api/login/refresh";
 
-    private RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
-    private String userManagementUrl;
+    private final String userManagementUrl;
 
     public RefreshTokenService(RestTemplate restTemplate, String userManagementUrl) {
         CheckArgument.isNotNull(restTemplate, "restTemplate must not be null");

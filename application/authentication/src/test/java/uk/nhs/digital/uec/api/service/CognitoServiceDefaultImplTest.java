@@ -54,9 +54,9 @@ public class CognitoServiceDefaultImplTest {
 
     private EmailNotificationService emailNotificationService;
 
-    private String emailAddress = "test@example.com";
+    private final String emailAddress = "test@example.com";
 
-    private String password = "password";
+    private final String password = "password";
 
     private Credentials credentials;
 

@@ -13,7 +13,7 @@ import uk.nhs.digital.uec.api.common.assertion.CheckArgument;
 import uk.nhs.digital.uec.api.common.mail.MailClient;
 import uk.nhs.digital.uec.api.common.mail.MailInlineResource;
 import uk.nhs.digital.uec.api.common.mail.Renderer;
-import uk.nhs.digital.uec.api.common.mail.properties.MailProperties;
+import uk.nhs.digital.uec.api.config.MailProperties;
 import uk.nhs.digital.uec.api.domain.ApprovalMessage;
 import uk.nhs.digital.uec.api.domain.PasswordResetMessage;
 import uk.nhs.digital.uec.api.domain.RegistrationPartIIReminderMessage;

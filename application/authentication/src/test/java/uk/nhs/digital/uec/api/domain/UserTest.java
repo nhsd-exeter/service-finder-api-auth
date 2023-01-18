@@ -30,11 +30,11 @@ public class UserTest {
     @Rule
     public ExpectedException exceptionRule = ExpectedException.none();
 
-    private long time = 99999;
+    private final long time = 99999;
 
-    private Clock clock = Clock.fixed(Instant.ofEpochSecond(time), ZoneId.of("UTC"));
+    private final Clock clock = Clock.fixed(Instant.ofEpochSecond(time), ZoneId.of("UTC"));
 
-    private User actor = new UserBuilder().createUser();
+    private final User actor = new UserBuilder().createUser();
 
     @Test
     public void updateDetailsFromUserSuccessfullyUpdatesUserDetails() {

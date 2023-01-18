@@ -14,7 +14,7 @@ import java.io.StringWriter;
 public class Renderer {
 
     private static final String BASE_PACKAGE_PATH = "/templates";
-    private Configuration configuration;
+    private final Configuration configuration;
 
     public Renderer() {
         configuration = new Configuration(Configuration.VERSION_2_3_28);

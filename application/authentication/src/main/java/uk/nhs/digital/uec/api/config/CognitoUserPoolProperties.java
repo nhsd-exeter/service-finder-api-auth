@@ -18,15 +18,15 @@ import javax.validation.constraints.NotBlank;
 public class CognitoUserPoolProperties {
 
     @NotBlank
-    @Value("${userPool.clientId}")
+    @Value("${cognito.userPool.clientId}")
     private String clientId;
 
     @NotBlank
-    @Value("${userPool.clientSecret}")
+    @Value("${cognito.userPool.clientSecret}")
     private String clientSecret;
 
     @NotBlank
-    @Value("${userPool.id}")
+    @Value("${cognito.userPool.id}")
     private String poolId;
 
 }

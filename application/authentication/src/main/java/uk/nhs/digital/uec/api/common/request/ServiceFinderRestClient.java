@@ -24,13 +24,13 @@ import uk.nhs.digital.uec.api.common.util.CookieUtil;
 @Service
 public class ServiceFinderRestClient {
 
-    private RestTemplateBuilder restTemplateBuilder;
+    private final RestTemplateBuilder restTemplateBuilder;
 
     /**
     * Service finder request scoped object to hold request related details such as authentication
     * tokens.
     */
-    private ServiceFinderRequest serviceFinderRequest;
+    private final ServiceFinderRequest serviceFinderRequest;
 
     @Autowired
     public ServiceFinderRestClient(final RestTemplateBuilder restTemplateBuilder,

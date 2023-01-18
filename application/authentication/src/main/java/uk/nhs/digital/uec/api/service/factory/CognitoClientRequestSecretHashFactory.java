@@ -24,9 +24,9 @@ public class CognitoClientRequestSecretHashFactory {
 
     private static final String HMAC_SHA256_ALGORITHM = "HmacSHA256";
 
-    private String userPoolClientId;
+    private final String userPoolClientId;
 
-    private String userPoolClientSecret;
+    private final String userPoolClientSecret;
 
     @Autowired
     public CognitoClientRequestSecretHashFactory(CognitoUserPoolProperties cognitoUserPoolProperties) {

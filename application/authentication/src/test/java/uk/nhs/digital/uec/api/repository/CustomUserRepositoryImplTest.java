@@ -103,7 +103,7 @@ public class CustomUserRepositoryImplTest {
 
     private CustomUserRepositoryImpl repository;
 
-    private Predicate[] predicateArray = new Predicate[1];
+    private final Predicate[] predicateArray = new Predicate[1];
 
     @Before
     public void setUp() {

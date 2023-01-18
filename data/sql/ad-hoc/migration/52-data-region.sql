@@ -1,0 +1,10 @@
+INSERT INTO service_finder.region (id, name, code) VALUES (1, 'East of England', 'EAST_OF_ENGLAND');
+INSERT INTO service_finder.region (id, name, code) VALUES (2, 'London', 'LONDON');
+INSERT INTO service_finder.region (id, name, code) VALUES (3, 'Midlands', 'MIDLANDS');
+INSERT INTO service_finder.region (id, name, code) VALUES (4, 'North East and Yorkshire', 'NORTH_EAST_AND_YORKSHIRE');
+INSERT INTO service_finder.region (id, name, code) VALUES (5, 'North West', 'NORTH_WEST');
+INSERT INTO service_finder.region (id, name, code) VALUES (6, 'South East', 'SOUTH_EAST');
+INSERT INTO service_finder.region (id, name, code) VALUES (7, 'South West', 'SOUTH_WEST');
+INSERT INTO service_finder.region (id, name, code) VALUES (8, 'Scotland', 'SCOTLAND');
+INSERT INTO service_finder.region (id, name, code) VALUES (9, 'Wales', 'WALES');
+INSERT INTO service_finder.region (id, name, code) VALUES (10, 'Other (only for use by admin users)', 'OTHER');

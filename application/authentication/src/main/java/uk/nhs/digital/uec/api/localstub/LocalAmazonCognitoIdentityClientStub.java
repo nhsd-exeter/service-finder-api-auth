@@ -10,11 +10,8 @@ import static uk.nhs.digital.uec.api.util.Constants.COGNITO_GROUP;
 import static uk.nhs.digital.uec.api.util.Constants.PASSWORD;
 import static uk.nhs.digital.uec.api.util.Constants.USERNAME;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+
 import lombok.extern.slf4j.Slf4j;
 import uk.nhs.digital.uec.api.util.LocalJwtFactory;
 
@@ -55,7 +52,7 @@ public class LocalAmazonCognitoIdentityClientStub extends AbstractAWSCognitoIden
   }
 
   private String generateAuthToken(String id, String issuer, String userName, long duration) {
-    Set<String> cognitoGroupNames = new HashSet<>(Arrays.asList(COGNITO_GROUP));
+    Set<String> cognitoGroupNames = new HashSet<>(List.of(COGNITO_GROUP));
     return new LocalJwtFactory().createToken(id, issuer, userName, duration, cognitoGroupNames);
   }
 }

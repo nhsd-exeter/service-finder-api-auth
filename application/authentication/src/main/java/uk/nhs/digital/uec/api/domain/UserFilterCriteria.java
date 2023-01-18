@@ -21,7 +21,7 @@ public enum UserFilterCriteria {
   @Getter
   private final FilterType filterType;
 
-  private UserFilterCriteria(String name, FilterType filterType) {
+  UserFilterCriteria(String name, FilterType filterType) {
     this.name = name;
     this.filterType = filterType;
   }

@@ -14,7 +14,7 @@ import java.util.Date;
 @Slf4j
 public class AccessTokenChecker {
 
-    private JwtDecoder decoder;
+    private final JwtDecoder decoder;
 
     public AccessTokenChecker(JwtDecoder decoder) {
         this.decoder = decoder;

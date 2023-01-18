@@ -85,7 +85,7 @@ public class TestAmazonCognitoIdentityClient extends AbstractAWSCognitoIdentityP
 
     private final Map<String, String> identityProviderIdPasswordMap;
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public TestAmazonCognitoIdentityClient(UserRepository userRepository) {
         this.userRepository = userRepository;

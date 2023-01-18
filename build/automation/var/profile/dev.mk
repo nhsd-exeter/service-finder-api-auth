@@ -37,6 +37,10 @@ TF_VAR_email_to_go_to_s3 := info@$(TF_VAR_sf_domain_name)
 TF_VAR_send_email_logging_level := INFO
 TF_VAR_service_finder_verification_redirect := $(TF_VAR_sf_domain_name) #To remove after new email address creation
 
+COOKIE_DOMAIN := $(TF_VAR_sf_domain_name)
+SF_AUTH_URL   :=  $(TF_VAR_sf_domain_name)
+ALLOWED_ORIGINS := *
+
 #Cognito user pool details
 COGNITO_USER_POOL := $(TF_VAR_service_prefix)-pool
 TF_VAR_cognito_user_pool := $(COGNITO_USER_POOL)
@@ -44,6 +48,7 @@ COGNITO_USER_POOL_CLIENT_SECRET := $(or $(COGNITO_USER_POOL_CLIENT_SECRET), )
 COGNITO_USER_POOL_CLIENT_ID := $(or $(COGNITO_USER_POOL_CLIENT_ID), )
 COGNITO_USER_POOL_ID := $(or $(COGNITO_USER_POOL_ID), )
 ADD_DEFAULT_COGNITO_USERS := true
+
 
 #Mail details
 MAIL_SENDER_NAME := NHS Service Finder

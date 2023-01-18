@@ -137,9 +137,7 @@ public class User {
   }
 
   public boolean isApproved() {
-    return this.getApprovalStatus() != null
-        ? this.getApprovalStatus().equals(APPROVAL_STATUS_APPROVED)
-        : false;
+    return this.getApprovalStatus() != null && this.getApprovalStatus().equals(APPROVAL_STATUS_APPROVED);
   }
 
   private boolean isValidApprovalStatusChange(String updatedApprovalStatus) {

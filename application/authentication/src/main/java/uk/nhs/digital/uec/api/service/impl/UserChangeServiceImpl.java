@@ -284,10 +284,6 @@ public class UserChangeServiceImpl implements UserChangeService {
       return false;
     }
 
-    if (oldValue != null && newValue != null && oldValue.trim().contentEquals(newValue.trim())) {
-      return false;
-    }
-
-    return true;
+    return oldValue == null || newValue == null || !oldValue.trim().contentEquals(newValue.trim());
   }
 }

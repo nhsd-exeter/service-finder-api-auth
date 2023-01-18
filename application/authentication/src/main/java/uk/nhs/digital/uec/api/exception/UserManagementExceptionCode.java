@@ -8,11 +8,11 @@ public enum UserManagementExceptionCode {
     INVALID_CODE("REG04", "The verification code is invalid for account: "),
     EMAIL_ADDRESS_NOT_REGISTERED("REG05", "Account is not registered: ");
 
-    private String code;
+    private final String code;
 
-    private String message;
+    private final String message;
 
-    private UserManagementExceptionCode(String code, String message){
+    UserManagementExceptionCode(String code, String message){
         this.code = code;
         this.message = message;
     }

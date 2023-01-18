@@ -5,21 +5,92 @@ services:
     image: $DOCKER_REGISTRY/api:latest
     container_name: authentication
     environment:
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS}
+      AUTH_LOGIN_URL: $AUTH_LOGIN_URL
+      AUTH_LOGIN_URI: $AUTH_LOGIN_URI
       COGNITO_USER_POOL_CLIENT_ID: $COGNITO_USER_POOL_CLIENT_ID
       COGNITO_USER_POOL_CLIENT_SECRET: $COGNITO_USER_POOL_CLIENT_SECRET
       COGNITO_USER_POOL_ID: $COGNITO_USER_POOL_ID
+      COOKIE_DOMAIN: $COOKIE_DOMAIN
+      DB_ENCRYPTION: '${DB_ENCRYPTION}'
+      DB_ENCRYPTION_MODE: $DB_ENCRYPTION_MODE
+      DB_HOST: $DB_HOST
+      DB_NAME: $DB_NAME
+      DB_PASSWORD: $DB_PASSWORD
+      DB_PORT: $DB_PORT
+      DB_USERNAME: $DB_USERNAME
+      POSTCODE_MAPPING_SERVICE_URL: $POSTCODE_MAPPING_SERVICE_URL
+      POSTCODE_MAPPING_USER: $POSTCODE_MAPPING_USER
+      POSTCODE_MAPPING_PASSWORD: $POSTCODE_MAPPING_PASSWORD
+      PROFILE: $PROFILE
+      MAIL_SENDER_EMAIL: $MAIL_SENDER_EMAIL
+      MAIL_SENDER_NAME: $MAIL_SENDER_NAME
+      SPRING_PROFILES_ACTIVE: $SPRING_PROFILES_ACTIVE
+      SF_AUTH_URL: $SF_AUTH_URL
       SERVER_PORT: $AUTH_SERVER_PORT
       CERTIFICATE_DOMAIN: $CERTIFICATE_DOMAIN
-      SPRING_PROFILES_ACTIVE: $SPRING_PROFILES_ACTIVE
+      UI_MAIN_UI: $UI_MAIN_UI
       VERSION: $VERSION
     ports:
       - 9025:443
+    depends_on:
+      - postgres
     command:
       ["java", "-jar", "/application/dos-service-finder-authentication-api.jar"]
     networks:
       default:
         aliases:
           - authentication.$PROJECT_NAME_SHORT.local
+
+  postgres:
+    image: nhsd/postgres:$DOCKER_LIBRARY_POSTGRES_VERSION
+    container_name: postgres
+    hostname: postgres
+    environment:
+      DB_NAME: $DB_NAME
+      DB_PASSWORD: postgres
+      DB_USERNAME: sfm
+    volumes:
+      - $PROJECT_DIR/data/sql/set-up/01-database.sql:/docker-entrypoint-initdb.d/01-database.sql:ro
+      - $PROJECT_DIR/data/sql/set-up/02-functions.sql:/docker-entrypoint-initdb.d/02-functions.sql:ro
+      - $PROJECT_DIR/data/sql/set-up/03-sequences.sql:/docker-entrypoint-initdb.d/03-sequences.sql:ro
+      - $PROJECT_DIR/data/sql/set-up/04-tables.sql:/docker-entrypoint-initdb.d/04-tables.sql:ro
+      - $PROJECT_DIR/data/sql/set-up/05-extensions.sql:/docker-entrypoint-initdb.d/05-extensions.sql:ro
+      - $PROJECT_DIR/data/sql/set-up/06-service-data.sql:/docker-entrypoint-initdb.d/06-service-data.sql:ro
+      - $PROJECT_DIR/data/sql/set-up/07-service-users.sql:/docker-entrypoint-initdb.d/07-service-users.sql:ro
+      - $PROJECT_DIR/data/sql/set-up/08-service-users-migration.sql:/docker-entrypoint-initdb.d/08-service-users-migration.sql:ro
+      - $PROJECT_DIR/data/sql/set-up/09-repoint-foriegn-keys-to-user-account-table.sql:/docker-entrypoint-initdb.d/09-repoint-foriegn-keys-to-user-account-table.sql:ro
+      - $PROJECT_DIR/data/sql/set-up/10-drop-user-table.sql:/docker-entrypoint-initdb.d/10-drop-user-table.sql:ro
+      - $PROJECT_DIR/data/sql/set-up/11-user-download-view.sql:/docker-entrypoint-initdb.d/11-user-download-view.sql:ro
+      - $PROJECT_DIR/data/sql/test/00-test-user.sql:/docker-entrypoint-initdb.d/12-test-user.sql:ro
+      # - $PROJECT_DIR/data/sql/ad-hoc/migration/50-schema-part1.sql:/docker-entrypoint-initdb.d/50-schema-part1.sql:ro
+      # - $PROJECT_DIR/data/sql/ad-hoc/migration/51-data-role.sql:/docker-entrypoint-initdb.d/51-role.sql:ro
+      # - $PROJECT_DIR/data/sql/ad-hoc/migration/52-data-region.sql:/docker-entrypoint-initdb.d/52-region.sql:ro
+      # - $PROJECT_DIR/data/sql/ad-hoc/migration/53-data-organisation_type.sql:/docker-entrypoint-initdb.d/53-organisation_type.sql:ro
+      # - $PROJECT_DIR/data/sql/ad-hoc/migration/54-data-job_type.sql:/docker-entrypoint-initdb.d/54-job_type.sql:ro
+      # - $PROJECT_DIR/data/sql/ad-hoc/migration/55-data-user.sql:/docker-entrypoint-initdb.d/55-user.sql:ro
+      # - $PROJECT_DIR/data/sql/ad-hoc/migration/56-data-user_role.sql:/docker-entrypoint-initdb.d/56-user_role.sql:ro
+      # - $PROJECT_DIR/data/sql/ad-hoc/migration/57-data-user_region.sql:/docker-entrypoint-initdb.d/57-user_region.sql:ro
+      # - $PROJECT_DIR/data/sql/ad-hoc/migration/58-data-login_attempt.sql:/docker-entrypoint-initdb.d/58-login_attempt.sql:ro
+      # - $PROJECT_DIR/data/sql/ad-hoc/migration/59-schema-part2.sql:/docker-entrypoint-initdb.d/59-schema-part2.sql:ro
+    ports:
+      - "5432:5432"
+    networks:
+      default:
+        aliases:
+          - postgres.sf.test
+  mockservice:
+    image: wiremock/wiremock:2.32.0
+    container_name: mockservice
+    volumes:
+      - $PROJECT_DIR/application/tests/integration-test/src/test/resources/mappings:/home/wiremock/mappings/
+    ports:
+      - "8090:8080"
+    command: [ "--verbose" ]
+    networks:
+      default:
+        aliases:
+          - mockservice.sf.test
 
 networks:
   default:

@@ -1,0 +1,18 @@
+INSERT INTO service_finder.organisation_type (id, name, code) VALUES (1, '111 Provider', '111_PROVIDER');
+INSERT INTO service_finder.organisation_type (id, name, code) VALUES (2, 'Acute Trust', 'ACUTE_TRUST');
+INSERT INTO service_finder.organisation_type (id, name, code) VALUES (3, 'Ambulance Service Trust', 'AMBULANCE_SERVICE_TRUST');
+INSERT INTO service_finder.organisation_type (id, name, code) VALUES (4, 'Ambulance Service (private)', 'AMBULANCE_SERVICE_PRIVATE');
+INSERT INTO service_finder.organisation_type (id, name, code) VALUES (5, 'Care Home', 'CARE_HOME');
+INSERT INTO service_finder.organisation_type (id, name, code) VALUES (6, 'Clinical Commissioning Group', 'CLINICAL_COMMISSIONING_GROUP');
+INSERT INTO service_finder.organisation_type (id, name, code) VALUES (7, 'Commissioning Support Unit', 'COMMISSIONING_SUPPORT_UNIT');
+INSERT INTO service_finder.organisation_type (id, name, code) VALUES (8, 'Dental Practice', 'DENTAL_PRACTICE');
+INSERT INTO service_finder.organisation_type (id, name, code) VALUES (9, 'GP Surgery', 'GP_SURGERY');
+INSERT INTO service_finder.organisation_type (id, name, code) VALUES (10, 'Local Authority', 'LOCAL_AUTHORITY');
+INSERT INTO service_finder.organisation_type (id, name, code) VALUES (11, 'Mental Health Trust', 'MENTAL_HEALTH_TRUST');
+INSERT INTO service_finder.organisation_type (id, name, code) VALUES (12, 'NHS England', 'NHS_ENGLAND');
+INSERT INTO service_finder.organisation_type (id, name, code) VALUES (13, 'Nursing Home', 'NURSING_HOME');
+INSERT INTO service_finder.organisation_type (id, name, code) VALUES (14, 'Out of hours GP Service', 'OUT_OF_HOURS_GP_SERVICE');
+INSERT INTO service_finder.organisation_type (id, name, code) VALUES (15, 'Optician', 'OPTICIAN');
+INSERT INTO service_finder.organisation_type (id, name, code) VALUES (16, 'Pharmacy', 'PHARMACY');
+INSERT INTO service_finder.organisation_type (id, name, code) VALUES (17, 'Private provider', 'PRIVATE_PROVIDER');
+INSERT INTO service_finder.organisation_type (id, name, code) VALUES (18, 'Other', 'OTHER');

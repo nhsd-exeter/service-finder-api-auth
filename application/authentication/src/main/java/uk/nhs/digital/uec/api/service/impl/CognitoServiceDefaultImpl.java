@@ -75,7 +75,7 @@ public class CognitoServiceDefaultImpl implements CognitoService {
 
   private final CognitoClientRequestSecretHashFactory secretHashFactory;
 
-  private EmailNotificationService emailNotificationService;
+  private final EmailNotificationService emailNotificationService;
 
   @Autowired
   public CognitoServiceDefaultImpl(

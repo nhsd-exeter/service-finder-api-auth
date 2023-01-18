@@ -10,7 +10,7 @@ import java.util.List;
 @Slf4j
 public abstract class MailClient {
 
-    private EmailValidator validator = EmailValidator.getInstance();
+    private final EmailValidator validator = EmailValidator.getInstance();
 
     public boolean isValidEmailAddress(String emailAddress) {
         return isTestEmailAddress(emailAddress) || validator.isValid(emailAddress);
@@ -30,7 +30,7 @@ public abstract class MailClient {
         } else {
             subject = subject == null ? "(no subject)" : subject;
             bodyCopy = bodyCopy == null ? "" : bodyCopy;
-            String disguisedRecipient = recipient.substring(0, 1) + "..." + recipient.substring(recipient.indexOf('@'));
+            String disguisedRecipient = recipient.charAt(0) + "..." + recipient.substring(recipient.indexOf('@'));
             try {
                 sendMessage(senderName, senderEmail, recipient, subject, bodyCopy, isHtml(bodyCopy), mailInlineResources);
                 log.info("Sent mail to " + disguisedRecipient);
@@ -51,7 +51,7 @@ public abstract class MailClient {
         } else {
             subject = subject == null ? "(no subject)" : subject;
             bodyCopy = bodyCopy == null ? "" : bodyCopy;
-            String disguisedRecipient = recipient.substring(0, 1) + "..." + recipient.substring(recipient.indexOf('@'));
+            String disguisedRecipient = recipient.charAt(0) + "..." + recipient.substring(recipient.indexOf('@'));
             try {
                 sendMessage(senderName, senderEmail, recipient, CC, subject, bodyCopy, isHtml(bodyCopy), mailInlineResources);
                 log.info("Sent mail to " + disguisedRecipient);

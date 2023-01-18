@@ -134,10 +134,7 @@ public class UserDetailBuilder {
     }
 
     private boolean userStateToInactive() {
-        if (this.userState != null && userState.equals(User.APPROVAL_STATUS_APPROVED)) {
-            return true;
-        }
-        return false;
+        return this.userState != null && userState.equals(User.APPROVAL_STATUS_APPROVED);
     }
 
     public UserDetail create() {

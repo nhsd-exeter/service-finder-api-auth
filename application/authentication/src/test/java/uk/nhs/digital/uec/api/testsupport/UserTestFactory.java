@@ -7,10 +7,7 @@ import uk.nhs.digital.uec.api.domain.Role;
 import uk.nhs.digital.uec.api.domain.User;
 import uk.nhs.digital.uec.api.domain.UserBuilder;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 
 import static uk.nhs.digital.uec.api.domain.User.APPROVAL_STATUS_PENDING;
 
@@ -50,7 +47,7 @@ public class UserTestFactory {
 
     public static final String approvalStatus = "PENDING";
 
-    public static final SortedSet<Role> roles = Collections.unmodifiableSortedSet(new TreeSet<>(Arrays.asList(role)));
+    public static final SortedSet<Role> roles = Collections.unmodifiableSortedSet(new TreeSet<>(List.of(role)));
 
     public static User createTestUser() {
         return atestUser().createUser();

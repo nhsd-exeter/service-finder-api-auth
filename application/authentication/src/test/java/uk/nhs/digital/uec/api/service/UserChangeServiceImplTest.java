@@ -48,22 +48,22 @@ public class UserChangeServiceImplTest {
 
     private UserChangeServiceImpl userChangeService;
 
-    private User actor = new UserBuilder().createUser();
+    private final User actor = new UserBuilder().createUser();
 
-    private User user = new UserBuilder().withName("Bob Jones").createUser();
-    private User editedUser = new UserBuilder().withName("Bob Jones").createUser();
+    private final User user = new UserBuilder().withName("Bob Jones").createUser();
+    private final User editedUser = new UserBuilder().withName("Bob Jones").createUser();
 
-    private Role searchRole = new Role();
-    private Role reportRole = new Role();
+    private final Role searchRole = new Role();
+    private final Role reportRole = new Role();
 
-    private JobType currentJobType = new JobType();
-    private JobType editedJobType = new JobType();
+    private final JobType currentJobType = new JobType();
+    private final JobType editedJobType = new JobType();
 
-    private OrganisationType orgType1 = new OrganisationType();
-    private OrganisationType orgType2 = new OrganisationType();
+    private final OrganisationType orgType1 = new OrganisationType();
+    private final OrganisationType orgType2 = new OrganisationType();
 
-    private Region region = new Region();
-    private Region editRegion = new Region();
+    private final Region region = new Region();
+    private final Region editRegion = new Region();
 
     {
         this.searchRole.setName("SEARCH");

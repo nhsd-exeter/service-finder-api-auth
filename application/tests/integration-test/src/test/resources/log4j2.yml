@@ -1,0 +1,27 @@
+Configuration:
+    name: Default
+    Properties:
+        Property:
+        - name: EX_FILTER
+          value: org.junit,org.apache.maven,sun.reflect,java.lang.reflect,org.apache.catalina,org.apache.cxf,sun.net.www,org.apache.coyote,org.apache.tomcat,java.util.concurrent,org.springframework.security.web,org.springframework.web,org.springframework.boot,javax.servlet,org.springframework.aop,java.lang.Thread,java.util
+        - name: TIMESTAMP
+          value: "yyyy-MM-dd HH:mm:ss.SSS"
+        - name: LEVEL_COLOR
+          value: "FATAL=red blink, ERROR=red, WARN=yellow bold, INFO=green, DEBUG=green bold, TRACE=blue"
+    Appenders:
+        Console:
+            name: Console_Appender
+            target: SYSTEM_OUT
+            PatternLayout:
+                pattern: "%d{${TIMESTAMP}} %highlight{%5p}{$level_color} %X{requestId}: %m%xEx{filters(${EX_FILTER})}%n"
+    Loggers:
+        Root:
+            level: info
+            AppenderRef:
+            - ref: Console_Appender
+        Logger:
+        - name: uk.nhs.digital.a2si.tests
+          additivity: false
+          level: info
+          AppenderRef:
+          - ref: Console_Appender

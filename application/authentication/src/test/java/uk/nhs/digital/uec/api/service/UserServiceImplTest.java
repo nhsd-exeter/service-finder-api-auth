@@ -134,25 +134,25 @@ public class UserServiceImplTest {
 
     private User user;
 
-    private Clock clock = Clock.systemUTC();
+    private final Clock clock = Clock.systemUTC();
 
     private Credentials credentials;
 
-    private String emailAddress = "ee2ee.com";
+    private final String emailAddress = "ee2ee.com";
 
-    private String actorEmailAddress = "actor@nhs.net";
+    private final String actorEmailAddress = "actor@nhs.net";
 
-    private long userId = 1234;
+    private final long userId = 1234;
 
-    private String subId = "12345";
+    private final String subId = "12345";
 
-    private String newRejectionReason = "rejection_reason";
+    private final String newRejectionReason = "rejection_reason";
 
-    private Role role = new Role();
+    private final Role role = new Role();
 
-    private String adminEmailAddress = "admin@email.com";
+    private final String adminEmailAddress = "admin@email.com";
 
-    private String[] approvedDomains = { "approved.com", "*.approvedsuffix.com" };
+    private final String[] approvedDomains = { "approved.com", "*.approvedsuffix.com" };
 
     @Before
     public void setUp() {

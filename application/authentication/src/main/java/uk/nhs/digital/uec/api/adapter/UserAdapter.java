@@ -152,10 +152,7 @@ public class UserAdapter {
   }
 
   private boolean toInactive(String userState) {
-    if (userState.equals(User.USER_STATE_INACTIVE)) {
-      return true;
-    }
-    return false;
+    return userState.equals(User.USER_STATE_INACTIVE);
   }
 
   /**

@@ -15,7 +15,7 @@ public enum UserSortCriteria {
   @Getter
   private final String name;
 
-  private UserSortCriteria(String name) {
+  UserSortCriteria(String name) {
     this.name = name;
   }
 
