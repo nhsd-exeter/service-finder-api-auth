@@ -13,3 +13,4 @@ module "ses" {
   tags               = local.standard_tags
 }
 
+/* This block tells SES that we'd like to register a domain for email sending and receiving */
