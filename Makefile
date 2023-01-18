@@ -1,11 +1,30 @@
 PROJECT_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 include $(abspath $(PROJECT_DIR)/build/automation/init.mk)
 DOCKER_REGISTRY_LIVE = $(DOCKER_REGISTRY)/prod
+SF_AWS_SECRET_NAME := service-finder/deployment
 
 prepare: ## Prepare environment
 	make \
 		git-config \
 		docker-config
+
+get-project-vars:
+	eval "$$(make aws-assume-role-export-variables)"
+	eval "$$(make project-populate-application-variables)"
+	eval "$$(make secret-fetch-and-export-variables NAME=$(SF_AWS_SECRET_NAME))"
+
+project-populate-application-variables:
+	export TTL=$$(make -s k8s-get-namespace-ttl)
+
+	export COGNITO_USER_POOL_CLIENT_SECRET=$$(make -s project-aws-get-cognito-client-secret NAME=$(COGNITO_USER_POOL))
+	export COGNITO_USER_POOL_CLIENT_ID=$$(make -s project-aws-get-cognito-client-id NAME=$(COGNITO_USER_POOL))
+	export COGNITO_USER_POOL_ID=$$(make -s aws-cognito-get-userpool-id NAME=$(COGNITO_USER_POOL))
+	export COGNITO_JWT_VERIFICATION_URL=https://cognito-idp.eu-west-2.amazonaws.com/$${COGNITO_USER_POOL_ID}/.well-known/jwks.json
+
+	export DB_MASTER_PASSWORD=$$(make -s aws-secret-get NAME=$(DB_MASTER_PASSWORD_SECRET))
+	export DB_PASSWORD=$$(make -s aws-secret-get NAME=$(DB_PASSWORD_SECRET))
+	export POSTCODE_MAPPING_PASSWORD=$$(make secret-fetch NAME=uec-dos-api-sfsa-$(FUZZY_PASSWORD_PROFILE)-cognito-passwords | jq .POSTCODE_PASSWORD | tr -d '"' )
+	export POSTCODE_MAPPING_PASSWORD_DMO=$$(make secret-fetch NAME=uec-dos-api-sfsa-$(FUZZY_PASSWORD_PROFILE)-cognito-passwords | jq .POSTCODE_PASSWORD_DMO | tr -d '"' )
 
 derive-build-tag:
 	dir=$$(make _docker-get-dir NAME=api)

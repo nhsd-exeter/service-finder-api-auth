@@ -25,6 +25,13 @@ pipeline {
   }
 
     stages {
+    stage('Export Project Varaibles'){
+        steps {
+          script {
+            sh 'make get-project-vars'
+          }
+        }
+      }
     stage('Show Variables') {
       steps {
         script {
