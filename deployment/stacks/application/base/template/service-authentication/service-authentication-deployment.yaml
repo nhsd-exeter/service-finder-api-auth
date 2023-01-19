@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: uec-sfa
+  namespace: uec-saa
   name: service-authentication
 spec:
   replicas: SERVICE_AUTHENTICATION_REPLICAS_TO_REPLACE
@@ -19,8 +19,8 @@ spec:
       labels:
         app: service-authentication
     spec:
-      serviceAccountName: uec-dos-api-sfa-service-account
-      serviceAccount: uec-dos-api-sfa-service-account
+      serviceAccountName: uec-dos-api-saa-service-account
+      serviceAccount: uec-dos-api-saa-service-account
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -35,7 +35,7 @@ spec:
                 topologyKey: kubernetes.io/hostname
       containers:
         - name: service-authentication
-          image: AWS_ECR_TO_REPLACE/uec-dos-api/sfa/api:API_IMAGE_TAG_TO_REPLACE
+          image: AWS_ECR_TO_REPLACE/uec-dos-api/saa/api:API_IMAGE_TAG_TO_REPLACE
           envFrom:
             - configMapRef:
                 name: service-authentication-configmap

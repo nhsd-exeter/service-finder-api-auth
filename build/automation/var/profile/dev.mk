@@ -10,7 +10,8 @@ SPRING_PROFILES_ACTIVE := $(PROFILE)
 API_IMAGE_TAG := v0.0.1
 VERSION := v0.0.1
 SLEEP_AFTER_PLAN := 1s
-SERVICE_PREFIX := service-finder-$(PROFILE)
+SERVICE_PREFIX := service-finder-auth-api-$(PROFILE)
+BASE_SERVICE_PREFIX := $(SERVICE_PREFIX)
 SERVICE_ACCOUNT := $(SERVICE_PREFIX)-role
 
 SPLUNK_INDEX := eks_logs_service_finder_nonprod
@@ -33,7 +34,7 @@ TF_VAR_service_finder_zone := servicefinder.nhs.uk
 TF_VAR_sf_domain_name := nonprod-servicefinder.nhs.uk
 TF_VAR_ui_main_url := https://$(TF_VAR_sf_domain_name)
 TF_VAR_application_service_account_name := $(APPLICATION_SA_NAME)
-TF_VAR_base_service_prefix = service-finder-auth-api-nonprod
+TF_VAR_base_service_prefix = $(BASE_SERVICE_PREFIX)
 TF_VAR_ses_domain_identity := $(TF_VAR_base_service_prefix).$(TF_VAR_platform_zone)
 TF_VAR_email_to_go_to_s3 := info@$(TF_VAR_sf_domain_name)
 TF_VAR_send_email_logging_level := INFO
@@ -58,14 +59,15 @@ COGNITO_USER_POOL_ID := $(or $(COGNITO_USER_POOL_ID), )
 ADD_DEFAULT_COGNITO_USERS := true
 
 # database settings
-DB_INSTANCE := $(TF_VAR_service_prefix)-db
+SERVICE_PREFIX_FOR_DB := service-finder-$(PROFILE)
+DB_INSTANCE := $(SERVICE_PREFIX_FOR_DB)-db
 DB_HOST = $(TF_VAR_rds_hostname)$(TF_VAR_platform_zone)
 DB_PORT := 5432
 DB_NAME := $(TF_VAR_database_name)
 DB_USERNAME := service_finder
 DB_MASTER_USERNAME := $(TF_VAR_postgres_master_username)
-DB_MASTER_PASSWORD_SECRET := $(TF_VAR_service_prefix)-postgres-master-password
-DB_PASSWORD_SECRET := $(TF_VAR_service_prefix)-postgres-service-finder-password
+DB_MASTER_PASSWORD_SECRET := $(SERVICE_PREFIX_FOR_DB)-postgres-master-password
+DB_PASSWORD_SECRET := $(SERVICE_PREFIX_FOR_DB)-postgres-service-finder-password
 DB_ENCRYPTION := true
 # To find options for DB_ENCRYPTION_MODE go to JDBC driver docs
 DB_ENCRYPTION_MODE := require

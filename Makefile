@@ -1,7 +1,64 @@
 PROJECT_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 include $(abspath $(PROJECT_DIR)/build/automation/init.mk)
-DOCKER_REGISTRY_LIVE = $(DOCKER_REGISTRY)/prod
+
+# ==============================================================================
+# TODO: Refactor old code
+
+PROFILE = $(SF_JENKINS_ENV)
+
+K8S_APP_NAMESPACE = $(PROJECT_GROUP_SHORT)-$(PROJECT_NAME_SHORT)-$(PROFILE)
+K8S_JOB_NAMESPACE = $(PROJECT_GROUP_SHORT)-$(PROJECT_NAME_SHORT)-jobs-$(PROFILE)
+
+PROJECT_APPLICATION_STACK_DIR=$(PROJECT_DIR)/deployment/stacks/application
+PROJECT_JOBS_STACK_DIR=$(PROJECT_DIR)/deployment/stacks/jobs
+
+JQ_PROGS_DIR_REL := $(shell echo $(abspath $(PROJECT_DIR)/build/jq) | sed "s;$(PROJECT_DIR);;g")
+
+# -------------------------------------
+
+# Variables to change to affect deployment
+DEFAULT_LOCAL_PROFILE := local
+DEFAULT_JENKINS_PROFILE := dev
+DEFAULT_JENKINS_PROFILE_LIVE := demo #default : demo
+GIT_TRUNK_BRANCH := master
+ROLLBACK := false
+DEPLOY_INFRASTRUCTURE_FROM_BRANCH := false
+DEPLOY_TO_K8S_FROM_BRANCH := false
+
+# IMAGE_BASE_VERSION := 202210211024-9f22e2b
+IMAGE_BASE_VERSION := 1.0.20191119
+
+JENKINS_ROLE := jenkins_assume_role
 SF_AWS_SECRET_NAME := service-finder/deployment
+SF_AWS_ADMIN_USER_PASSWORD_SECRET = service-finder-$(PROFILE)-cognito-admin-password
+SF_JENKINS_ENV = $(if $(HUDSON_URL),$(shell echo $(HUDSON_URL) | grep prod > /dev/null 2>&1 && echo $(DEFAULT_JENKINS_PROFILE_LIVE)|| echo $(DEFAULT_JENKINS_PROFILE)),$(DEFAULT_LOCAL_PROFILE))
+K8S_JOB_DATA_NAMESPACE = $(PROJECT_GROUP_SHORT)-$(PROJECT_NAME_SHORT)-job-data-$(PROFILE)
+K8S_JOB_ELASTIC_SEARCH_NAMESPACE = $(PROJECT_GROUP_SHORT)-$(PROJECT_NAME_SHORT)-job-es-$(PROFILE)
+PROJECT_GROUP_NAME_SHORT := $(PROJECT_GROUP_SHORT)-$(PROJECT_NAME_SHORT)
+APP_URL_PREFIX := $(K8S_APP_NAMESPACE)-$(PROJECT_GROUP_SHORT)-$(PROJECT_NAME_SHORT)
+
+TERRAFORM_DIR := infrastructure/stacks
+JENKINS_WORKSPACE_BUCKET := $(PROJECT_GROUP_SHORT)-$(PROJECT_NAME_SHORT)-jenkins-workspace
+
+# ==============================================================================
+
+
+# ==============================================================================
+# Feature flags:
+#include $(VAR_DIR)/feature-flags/$(PROFILE).mk
+# ==============================================================================
+
+include $(VAR_DIR)/profile/$(PROFILE).mk
+
+DOCKER_REGISTRY_LIVE = $(DOCKER_REGISTRY)/prod
+DOCKER_NGINX_VERSION = 1.16.1-alpine
+
+
+# ==============================================================================
+
+
+
+
 
 prepare: ## Prepare environment
 	make \
@@ -185,6 +242,90 @@ clean: # Clean up project
 
 
 # ==============================================================================
+
+
+
+# ==============================================================================
+
+k8s-wait-for-job-to-complete: ### Wait for the job to complete
+	count=1
+	until [ $$count -gt 20 ]; do
+		if [ "$$(make -s k8s-job-failed | tr -d '\n')" == "True" ]; then
+			echo "The job has failed"
+			exit 1
+		fi
+		if [ "$$(make -s k8s-job-complete | tr -d '\n')" == "True" ]; then
+			echo "The job has completed"
+			exit 0
+		fi
+		echo "Still waiting for the job to complete"
+		sleep 5
+		((count++)) ||:
+	done
+	echo "The job has not completed, but have given up waiting."
+	exit 1
+
+k8s-get-replica-sets-not-yet-updated:
+	echo -e
+	kubectl get deployments -n $(K8S_APP_NAMESPACE) \
+	-o=jsonpath='{range .items[?(@.spec.replicas!=@.status.updatedReplicas)]}{.metadata.name}{"("}{.status.updatedReplicas}{"/"}{.spec.replicas}{")"}{" "}{end}'
+
+k8s-get-pod-status:
+	echo -e
+	kubectl get pods -n $(K8S_APP_NAMESPACE)
+
+k8s-check-deployment-of-replica-sets:
+	eval "$$(make aws-assume-role-export-variables)"
+	make k8s-kubeconfig-get
+	eval "$$(make k8s-kubeconfig-export-variables)"
+	sleep 10
+	elaspedtime=10
+	until [ $$elaspedtime -gt $(CHECK_DEPLOYMENT_TIME_LIMIT) ]; do
+		replicasNotYetUpdated=$$(make -s k8s-get-replica-sets-not-yet-updated)
+		if [ -z "$$replicasNotYetUpdated" ]
+		then
+			echo "Success - all replica sets in the deployment have been updated."
+			exit 0
+		else
+			echo "Waiting for all replicas to be updated: " $$replicasNotYetUpdated
+
+			echo "----------------------"
+			echo "Pod status: "
+			make k8s-get-pod-status
+			podStatus=$$(make -s k8s-get-pod-status)
+			echo "-------"
+
+			#Check failure conditions
+			if [[ $$podStatus = *"ErrImagePull"*
+					|| $$podStatus = *"ImagePullBackOff"* ]]; then
+				echo "Failure: Error pulling Image"
+				exit 1
+			elif [[ $$podStatus = *"Error"*
+								|| $$podStatus = *"error"*
+								|| $$podStatus = *"ERROR"* ]]; then
+				echo "Failure: Error with deployment"
+				exit 1
+			fi
+
+		fi
+		sleep 10
+		((elaspedtime=elaspedtime+$(CHECK_DEPLOYMENT_POLL_INTERVAL)))
+		echo "Elapsed time: " $$elaspedtime
+	done
+
+	echo "Conditional Success: The deployment has not completed within the timescales, but carrying on anyway"
+	exit 0
+
+# ==============================================================================
+
+
+
+
+
+
+
+
+
 # Supporting targets
 
 trust-certificate: ssl-trust-certificate-project ## Trust the SSL development certificate
@@ -291,7 +432,7 @@ pipeline-create-resources: ## Create all the pipeline deployment supporting reso
 	#make ssl-request-certificate-prod SSL_DOMAINS_PROD
 	# Centralised, i.e. `mgmt`
 	eval "$$(make aws-assume-role-export-variables AWS_ACCOUNT_ID=$(AWS_ACCOUNT_ID_MGMT))"
-	#make docker-create-repository NAME=uec-dos-api/sfa/api
+	#make docker-create-repository NAME=uec-dos-api/saa/api
 	#make aws-codeartifact-setup REPOSITORY_NAME=$(PROJECT_GROUP_SHORT)
 
 # ==============================================================================

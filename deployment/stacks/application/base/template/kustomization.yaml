@@ -45,5 +45,5 @@ configMapGenerator:
       - UI_MAIN_UI=UI_MAIN_UI_TO_REPLACE
       - VERSION=VERSION_TO_REPLACE
 images:
-  - name: AWS_ECR_TO_REPLACE/uec-dos-api/sfa/api
+  - name: AWS_ECR_TO_REPLACE/uec-dos-api/saa/api
     newTag: API_IMAGE_TAG_TO_REPLACE
