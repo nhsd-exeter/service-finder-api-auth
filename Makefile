@@ -26,6 +26,21 @@ project-populate-application-variables:
 	export POSTCODE_MAPPING_PASSWORD=$$(make secret-fetch NAME=uec-dos-api-sfsa-$(FUZZY_PASSWORD_PROFILE)-cognito-passwords | jq .POSTCODE_PASSWORD | tr -d '"' )
 	export POSTCODE_MAPPING_PASSWORD_DMO=$$(make secret-fetch NAME=uec-dos-api-sfsa-$(FUZZY_PASSWORD_PROFILE)-cognito-passwords | jq .POSTCODE_PASSWORD_DMO | tr -d '"' )
 
+project-aws-get-cognito-client-id: # Get AWS cognito client id - mandatory: NAME
+	aws cognito-idp list-user-pool-clients \
+		--user-pool-id $$(make -s aws-cognito-get-userpool-id NAME=$(NAME)) \
+		--region $(AWS_REGION) \
+		--query 'UserPoolClients[].ClientId' \
+		--output text
+
+project-aws-get-cognito-client-secret: # Get AWS secret - mandatory: NAME
+	aws cognito-idp describe-user-pool-client \
+		--user-pool-id $$(make -s aws-cognito-get-userpool-id NAME=$(NAME)) \
+		--client-id $$(make -s project-aws-get-cognito-client-id NAME=$(NAME)) \
+		--region $(AWS_REGION) \
+		--query 'UserPoolClient.ClientSecret' \
+		--output text
+
 derive-build-tag:
 	dir=$$(make _docker-get-dir NAME=api)
 	echo $$(cat $$dir/VERSION) | \

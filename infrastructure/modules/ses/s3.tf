@@ -16,7 +16,7 @@ resource "aws_s3_bucket" "ses_bucket" {
   tags = merge(
     var.tags,
     {
-      "Name" = "Service Finder SES emails bucket"
+      "Name" = "Service Finder Authentication SES emails bucket"
     },
   )
 }
