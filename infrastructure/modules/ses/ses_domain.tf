@@ -73,8 +73,7 @@ resource "aws_route53_record" "mx_send_mail_from" {
   name    = aws_ses_domain_mail_from.main.mail_from_domain
   type    = "MX"
   ttl     = "600"
-  //records = ["10 feedback-smtp.eu-west-1.amazonses.com"]
-  records = ["10 feedback-smtp.eu-west-2.amazonses.com"]
+  records = ["10 feedback-smtp.${var.ireland_region}.amazonses.com"]
 }
 
 # Receiving MX Record
@@ -83,8 +82,7 @@ resource "aws_route53_record" "mx_receive" {
   name    = var.domain_name
   type    = "MX"
   ttl     = "600"
-  records = ["10 inbound-smtp.eu-west-2.amazonaws.com"]
-  //records = ["10 inbound-smtp.eu-west-1.amazonaws.com"]
+  records = ["10 inbound-smtp.${var.ireland_region}.amazonaws.com"]
 }
 
 #
