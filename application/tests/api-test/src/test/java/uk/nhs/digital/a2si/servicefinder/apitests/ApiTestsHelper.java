@@ -12,23 +12,6 @@ import org.apache.http.HttpStatus;
 
 public class ApiTestsHelper {
 
-  public static final String SFS_HOST = "https://service-finder.sf.test";
-  public static final int SFS_PORT = 8443;
-  public static final String USER_MANAGEMENT_HOST = "https://user-management.sf.test";
-  public static final int USER_MANAGEMENT_PORT = 8443;
-  public static final String FEEDBACK_HOST = "https://feedback.sf.test";
-  public static final int FEEDBACK_PORT = 8443;
-  public static final String VALID_ORIGIN = "https://ui-user.sf.test:8443";
-  public static final String SFS_ORIGIN = "https://service-finder.sf.test:8443";
-
-  // public static final String SFS_HOST = "https://localhost";
-  // public static final int SFS_PORT = 18080;
-  // public static final String USER_MANAGEMENT_HOST = "https://localhost";
-  // public static final int USER_MANAGEMENT_PORT = 18083;
-  // public static final String FEEDBACK_HOST = "https://localhost";
-  // public static final int FEEDBACK_PORT = 18082;
-  // public static final String VALID_ORIGIN = "https://localhost";
-  // public static final String SFS_ORIGIN = "https://localhost:18080";
 
   public static final String TEST_USER_NAME = "SF Test Account";
   public static final String NEW_USER_PASSWORD = "new_password";

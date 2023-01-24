@@ -115,24 +115,6 @@ compile: project-config # Compile the project to make the target class (binary) 
 		DIR="application/authentication" \
 		CMD="compile"
 
-coverage-report: # Generate jacoco test coverage reports
-	make load-cert-to-application # FIXME: Remove it !!!
-	make unit-test
-	make docker-run-mvn \
-		DIR="application/authentication" \
-		CMD="jacoco:report"
-
-unit-test: # Run project unit tests
-	make docker-run-mvn \
-		DIR="application/authentication" \
-		CMD="test"
-
-run-contract-tests:
-	make start PROFILE=local VERSION=$(VERSION)
-	cd test/contract
-	make run-contract
-	cd ../../
-	make stop
 
 # ==============================================================================
 # Development workflow targets
@@ -234,11 +216,20 @@ project-push-image: ## Push the docker images (API) to the ECR
 	make docker-push NAME=api VERSION=${VERSION}
 
 deploy: # Deploy artefacts - mandatory: PROFILE=[name]
-	make project-deploy STACK=application PROFILE=$(PROFILE)
+	eval "$$(make aws-assume-role-export-variables)"
+	eval "$$(make project-populate-application-variables)"
+	make project-deploy PROFILE=$(PROFILE) STACK=$(DEPLOYMENT_STACKS)
 
 clean: # Clean up project
 	make stop
 	docker network rm $(DOCKER_NETWORK) 2> /dev/null ||:
+
+
+
+docker-run-mvn-lib-mount: ### Build Docker image mounting library volume - mandatory: DIR, CMD
+	make docker-run-mvn LIB_VOLUME_MOUNT=true \
+		DIR="$(DIR)" \
+		CMD="$(CMD)"
 
 
 # ==============================================================================
@@ -376,8 +367,6 @@ apply-data-changes:
 run-static-analisys:
 	echo TODO: $(@)
 
-run-unit-test:
-	echo TODO: $(@)
 
 run-smoke-test:
 	echo TODO: $(@)
@@ -385,8 +374,6 @@ run-smoke-test:
 run-integration-test:
 	echo TODO: $(@)
 
-run-contract-test:
-	echo TODO: $(@)
 
 run-functional-test:
 	[ $$(make project-branch-func-test) != true ] && exit 0
@@ -400,7 +387,38 @@ run-security-test:
 	[ $$(make project-branch-sec-test) != true ] && exit 0
 	echo TODO: $(@)
 
+
+coverage-report: # Generate jacoco test coverage reports
+	make load-cert-to-application # FIXME: Remove it !!!
+	make unit-test
+	make docker-run-mvn \
+		DIR="application/authentication" \
+		CMD="jacoco:report"
+
+unit-test: # Run project unit tests
+	make docker-run-mvn \
+		DIR="application/authentication" \
+		CMD="test"
+
+run-contract-test:
+	make start PROFILE=local VERSION=$(VERSION)
+	cd test/contract
+	make run-contract
+	cd ../../
+	make stop
+
+run-api-test: # API test, requires project to be started with PROFILE=test
+	make docker-run-mvn-lib-mount \
+		DIR="application/authentication/tests/api-test" \
+		CMD="clean test" \
+		PROFILE=test
+
 # --------------------------------------
+
+
+
+
+
 
 remove-unused-environments:
 	echo TODO: $(@)

@@ -1,4 +1,4 @@
-package uk.nhs.digital.a2si.servicefinder.apitests.usermanagement;
+package uk.nhs.digital.a2si.servicefinder.apitests;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
