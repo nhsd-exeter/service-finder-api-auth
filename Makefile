@@ -218,7 +218,7 @@ project-push-image: ## Push the docker images (API) to the ECR
 deploy: # Deploy artefacts - mandatory: PROFILE=[name]
 	eval "$$(make aws-assume-role-export-variables)"
 	eval "$$(make project-populate-application-variables)"
-	make project-deploy PROFILE=$(PROFILE) STACK=$(DEPLOYMENT_STACKS)
+	make project-deploy PROFILE=$(PROFILE) STACK=application
 
 clean: # Clean up project
 	make stop
