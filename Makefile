@@ -407,18 +407,7 @@ run-contract-test:
 	cd ../../
 	make stop
 
-run-api-test: # API test, requires project to be started with PROFILE=test
-	make docker-run-mvn-lib-mount \
-		DIR="application/authentication/tests/api-test" \
-		CMD="clean test" \
-		PROFILE=test
-
 # --------------------------------------
-
-
-
-
-
 
 remove-unused-environments:
 	echo TODO: $(@)

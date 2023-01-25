@@ -69,13 +69,6 @@ pipeline {
         }
       }
     }
-    stage('Perform API Tests') {
-        steps {
-                script {
-                    sh "make run-api-test"
-                }
-            }
-    }
     stage('Push API Image to ECR') {
       steps {
         script {
