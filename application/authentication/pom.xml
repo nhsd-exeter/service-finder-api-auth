@@ -219,8 +219,9 @@
         <version>${jacoco-maven-plugin.version}</version>
         <configuration>
           <excludes>
-            <exclude>**/config/*.*</exclude>
+            <exclude>**/config/**/*.*</exclude>
             <exclude>**/interceptor/*.*</exclude>
+            <exclude>**/common/**/*.*</exclude>
             <exclude>**/domain/**/*.*</exclude>
             <exclude>**/model/**/*.*</exclude>
             <exclude>**/exception/*.class</exclude>
@@ -257,12 +258,13 @@
                     <exclude>*model</exclude>
                     <exclude>*domain</exclude>
                     <exclude>*filter</exclude>
+                    <exclude>*common</exclude>
                   </excludes>
                   <limits>
                     <limit>
                       <counter>METHOD</counter>
                       <value>COVEREDRATIO</value>
-                      <minimum>0%</minimum>
+                      <minimum>50%</minimum>
                     </limit>
                   </limits>
                 </rule>
