@@ -9,7 +9,6 @@ locals {
 
   # Simple Email Service
   sf_ses = {
-    aws_region  = "eu-west-1"
     dmarc_rua   = var.email_to_go_to_s3
     domain_name = var.sf_domain_name
     #recipient_addresses = [var.email_accounts]

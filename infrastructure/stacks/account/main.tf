@@ -1,7 +1,7 @@
 module "ses" {
   source             = "../../modules/ses"
   aws_account        = var.aws_account_id
-  aws_region         = local.sf_ses["aws_region"]
+  aws_region         = var.ireland_region // ses receving emails works only in ireland
   service_prefix     = var.base_service_prefix
   route53_zone_id    = data.terraform_remote_state.route53.outputs.dns_zone_id
   dmarc_rua          = local.sf_ses["dmarc_rua"]

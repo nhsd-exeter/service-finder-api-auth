@@ -7,15 +7,6 @@ variable "aws_region" {
   description = "AWS region."
 }
 
-variable "ireland_region" {
-  description = "Ireland region."
-  default     = "eu-west-1"
-}
-variable "london_region" {
-  description = "London region"
-  default     = "eu-west-2"
-}
-
 variable "tags" {
   type        = map(string)
   description = "A list of standard tags for any given resource."
