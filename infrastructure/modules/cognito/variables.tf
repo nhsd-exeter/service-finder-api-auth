@@ -8,10 +8,6 @@ variable "ireland_region" {
   description = "Ireland region."
   default     = "eu-west-1"
 }
-variable "london_region" {
-  description = "London region"
-  default     = "eu-west-2"
-}
 
 
 variable "tags" {

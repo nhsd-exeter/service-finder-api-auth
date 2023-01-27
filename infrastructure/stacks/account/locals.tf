@@ -9,9 +9,8 @@ locals {
 
   # Simple Email Service
   sf_ses = {
-    dmarc_rua   = var.email_to_go_to_s3
-    domain_name = var.sf_domain_name
-    #recipient_addresses = [var.email_accounts]
+    dmarc_rua         = var.email_to_go_to_s3
+    domain_name       = var.sf_domain_name
     s3_email          = var.email_to_go_to_s3
     receive_s3_bucket = "uec-${var.base_service_prefix}-ses"
     receive_s3_prefix = "received_emails"

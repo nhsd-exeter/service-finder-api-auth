@@ -10,5 +10,5 @@ module "cognito" {
   s3_email_address                     = local.sf_cognito["s3_email_address"]
   ui_main_url                          = local.sf_cognito["ui_main_url"]
   service_finder_verification_redirect = local.sf_cognito["service_finder_verification_redirect"]
-
+  // depends_on                           = [aws_ses_email_identity.s3_email]
 }

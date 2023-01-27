@@ -6,3 +6,9 @@ data "terraform_remote_state" "route53" {
     region = var.aws_region
   }
 }
+
+
+data "aws_route53_zone" "selected" {
+  name         = local.sf_ses["domain_name"]
+  private_zone = false
+}

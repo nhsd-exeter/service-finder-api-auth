@@ -32,7 +32,7 @@ pipeline {
         }
       }
     }
-    stage('Derive Build Tag') {
+  stage('Derive Build Tag') {
       steps {
         script {
           env.PROJECT_BUILD_TAG = sh(returnStdout: true, script: 'make derive-build-tag').trim()

@@ -83,6 +83,6 @@ TF_VAR_db_password_secret := $(DB_PASSWORD_SECRET)
 
 #Mail details
 MAIL_SENDER_NAME := NHS Service Finder
-MAIL_SENDER_EMAIL := info@sf.directoryofservices.nhs.uk # info@$(TF_VAR_sf_domain_name) .need to be replaced with info@servicefinder.nhs.uk after email verified with ses
+MAIL_SENDER_EMAIL :=  info@$(TF_VAR_sf_domain_name)
 TF_VAR_mail_sender_email := $(MAIL_SENDER_EMAIL)
 TF_VAR_mail_sender_subject := $(MAIL_SENDER_NAME)

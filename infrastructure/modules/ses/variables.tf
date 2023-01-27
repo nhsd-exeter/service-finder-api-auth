@@ -7,6 +7,12 @@ variable "aws_region" {
   description = "AWS region."
 }
 
+variable "ireland_region" {
+  description = "Ireland region."
+  default     = "eu-west-1"
+}
+
+
 variable "tags" {
   type        = map(string)
   description = "A list of standard tags for any given resource."
@@ -17,6 +23,23 @@ variable "dmarc_rua" {
   description = "Email address for capturing DMARC aggregate reports."
 }
 
+variable "enable_dmarc" {
+  description = "Control whether to create DMARC TXT record."
+  type        = bool
+  default     = true
+}
+
+variable "enable_incoming_email" {
+  description = "Control whether or not to handle incoming emails."
+  type        = bool
+  default     = true
+}
+
+variable "enable_spf_record" {
+  description = "Control whether or not to set SPF records."
+  type        = bool
+  default     = true
+}
 variable "domain_name" {
   description = "The domain name to configure SES."
 }

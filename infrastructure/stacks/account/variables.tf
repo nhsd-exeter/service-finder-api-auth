@@ -11,13 +11,7 @@ variable "profile" { description = "K8s deployment profile name that can be eith
 
 # === Common ===================================================================
 
-variable "ireland_region" {
-  description = "Ireland region."
-  default     = "eu-west-1"
-}
-
 variable "aws_region" { description = "Texas AWS deployment region" }
-
 
 variable "base_service_prefix" { description = "The prefix to be used for all infrastructure" }
 
