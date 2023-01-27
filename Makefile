@@ -18,7 +18,7 @@ JQ_PROGS_DIR_REL := $(shell echo $(abspath $(PROJECT_DIR)/build/jq) | sed "s;$(P
 
 # Variables to change to affect deployment
 DEFAULT_LOCAL_PROFILE := local
-DEFAULT_JENKINS_PROFILE := dev
+DEFAULT_JENKINS_PROFILE := nonprod
 DEFAULT_JENKINS_PROFILE_LIVE := demo #default : demo
 GIT_TRUNK_BRANCH := master
 ROLLBACK := false

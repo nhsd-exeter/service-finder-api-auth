@@ -3,7 +3,7 @@
 # Arrange
 make project-create-infrastructure MODULE_TEMPLATE=rds STACK_TEMPLATE=rds STACK=database
 make project-create-profile NAME=dev
-cat << HEREDOC >> build/automation/var/profile/dev.mk
+cat << HEREDOC >> build/automation/var/profile/nonprod.mk
 DB_INSTANCE = \$(PROJECT_GROUP_SHORT)-\$(PROJECT_NAME_SHORT)-\$(DB_NAME)-\$(PROFILE)
 DB_PORT = 5432
 DB_NAME = test
