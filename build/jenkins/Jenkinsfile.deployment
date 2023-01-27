@@ -13,7 +13,7 @@ pipeline {
   }
 
   environment {
-    PROFILE = 'dev'
+    PROFILE = 'nonprod'
   }
 
   parameters {
@@ -24,32 +24,11 @@ pipeline {
         )
   }
 
-    stages {
-    stage('Export Project Varaibles') {
-        steps {
-          script {
-            sh 'make get-project-vars'
-          }
-        }
-    }
-    stage('Show Variables') {
-      steps {
-        script {
-          sh 'make devops-print-variables'
-        }
-      }
-    }
+  stages {
     stage('Prepare') {
       steps {
         script {
           sh 'make prepare'
-        }
-      }
-    }
-    stage('Populate Cognito') {
-      steps {
-        script {
-          sh 'make project-populate-cognito'
         }
       }
     }
@@ -64,6 +43,29 @@ pipeline {
       steps {
         script {
           sh "make  project-infrastructure-set-up PROFILE=${env.PROFILE}"
+        }
+      }
+    }
+
+    stage('Populate Cognito') {
+      steps {
+        script {
+          sh 'make project-populate-cognito'
+        }
+      }
+    }
+
+    stage('Export Project Varaibles') {
+        steps {
+          script {
+            sh 'make get-project-vars'
+          }
+        }
+    }
+    stage('Show Variables') {
+      steps {
+        script {
+          sh 'make devops-print-variables'
         }
       }
     }
@@ -103,7 +105,7 @@ pipeline {
         }
       }
     }
-    }
+  }
   post {
     always { sh 'make clean' }
     success { sh 'make pipeline-on-success' }

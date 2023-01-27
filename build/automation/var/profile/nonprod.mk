@@ -25,7 +25,7 @@ AUTH_SERVER_PORT := 443
 # Infrastructure variables
 
 DEPLOYMENT_STACKS := application
-INFRASTRUCTURE_STACKS := authentication,account
+INFRASTRUCTURE_STACKS := account,authentication
 
 TF_VAR_project_id := $(PROJECT_ID)
 TF_VAR_aws_account_id := $(AWS_ACCOUNT_ID_NONPROD)
