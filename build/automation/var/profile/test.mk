@@ -47,12 +47,12 @@ USER_AUTO_LOGOUT_TRESHOLD := 1
 # logout user after further X minutes
 USER_AUTO_LOGOUT_TIMEOUT := 2
 
-POSTCODE_MAPPING_SERVICE_URL := http://mockservice.sf.test:8080/app/controllers
-POSTCODE_MAPPING_USER := service-finder-admin@nhs.net
-POSTCODE_MAPPING_PASSWORD := password
+#POSTCODE_MAPPING_SERVICE_URL := http://mockservice.sf.test:8080/app/controllers
+#POSTCODE_MAPPING_USER := service-finder-admin@nhs.net
+#POSTCODE_MAPPING_PASSWORD := password
 
-AUTH_LOGIN_URL := http://mockservice.sf.test:8080/app/controllers
-AUTH_LOGIN_URI := /authentication/login
+#AUTH_LOGIN_URL := http://mockservice.sf.test:8080/app/controllers
+#AUTH_LOGIN_URI := /authentication/login
 
 # Please note that there are environment variables in the local project
 # please see: 'legacy/tests/integration-test/src/test/resources/properties/environment.properties'

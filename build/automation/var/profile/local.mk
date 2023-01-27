@@ -6,7 +6,7 @@ SPRING_PROFILES_ACTIVE := local,mail-smtp
 CERTIFICATE_DOMAIN := certificate
 AUTH_SERVER_PORT := 443
 VERSION := v0.0.1
-UI_MAIN_UI := https://localhost:8080
+#UI_MAIN_UI := https://localhost:8080
 #Cognito configuration
 COGNITO_JWT_VERIFICATION_URL := http://testJwtVerificationUrl
 COGNITO_USER_POOL_CLIENT_ID := testUserPoolClientId
@@ -29,9 +29,9 @@ DB_ENCRYPTION_MODE := require
 MAIL_SENDER_NAME := Service Finder Authentication
 MAIL_SENDER_EMAIL := info@servicefinder.nhs.uk
 
-AUTH_LOGIN_URL := http://mockservice.sf.test:8080/app/controllers
-AUTH_LOGIN_URI := /authentication/login
+#AUTH_LOGIN_URL := http://mockservice.sf.test:8080/app/controllers
+#AUTH_LOGIN_URI := /authentication/login
 
-POSTCODE_MAPPING_SERVICE_URL := http://mockservice.sf.test:8080/app/controllers
-POSTCODE_MAPPING_USER := service-finder-admin@nhs.net
-POSTCODE_MAPPING_PASSWORD := password
+#POSTCODE_MAPPING_SERVICE_URL := http://mockservice.sf.test:8080/app/controllers
+#POSTCODE_MAPPING_USER := service-finder-admin@nhs.net
+#POSTCODE_MAPPING_PASSWORD := password

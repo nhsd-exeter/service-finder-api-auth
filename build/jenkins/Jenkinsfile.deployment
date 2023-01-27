@@ -25,13 +25,13 @@ pipeline {
   }
 
     stages {
-    stage('Export Project Varaibles'){
+    stage('Export Project Varaibles') {
         steps {
           script {
             sh 'make get-project-vars'
           }
         }
-      }
+    }
     stage('Show Variables') {
       steps {
         script {
@@ -46,7 +46,13 @@ pipeline {
         }
       }
     }
-
+    stage('Populate Cognito') {
+      steps {
+        script {
+          sh 'make project-populate-cognito'
+        }
+      }
+    }
     stage('Plan Infrastructure') {
       steps {
         script {

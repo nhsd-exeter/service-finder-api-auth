@@ -27,10 +27,15 @@ AUTH_SERVER_PORT := 443
 DEPLOYMENT_STACKS := application
 INFRASTRUCTURE_STACKS := authentication,account
 
+TF_VAR_project_id := $(PROJECT_ID)
+TF_VAR_aws_account_id := $(AWS_ACCOUNT_ID_NONPROD)
 TF_VAR_service_prefix := $(SERVICE_PREFIX)
 TF_VAR_service_prefix_short := saa-$(PROFILE)
 
 TF_VAR_service_finder_zone := servicefinder.nhs.uk
+TF_VAR_nhs_net_service_finder_zone := nhs.net
+TF_VAR_enable_vpn_access_to_rds := true
+
 TF_VAR_sf_domain_name := nonprod-servicefinder.nhs.uk
 TF_VAR_ui_main_url := https://$(TF_VAR_sf_domain_name)
 TF_VAR_application_service_account_name := $(APPLICATION_SA_NAME)
@@ -52,11 +57,14 @@ ALLOWED_ORIGINS := *
 
 #Cognito user pool details
 COGNITO_USER_POOL := $(TF_VAR_service_prefix)-pool
-TF_VAR_cognito_user_pool := $(COGNITO_USER_POOL)
 COGNITO_USER_POOL_CLIENT_SECRET := $(or $(COGNITO_USER_POOL_CLIENT_SECRET), )
 COGNITO_USER_POOL_CLIENT_ID := $(or $(COGNITO_USER_POOL_CLIENT_ID), )
 COGNITO_USER_POOL_ID := $(or $(COGNITO_USER_POOL_ID), )
-ADD_DEFAULT_COGNITO_USERS := true
+#ADD_DEFAULT_COGNITO_USERS := true
+
+TF_VAR_cognito_user_pool_client_secret :=  $(COGNITO_USER_POOL_CLIENT_SECRET)
+TF_VAR_cognito_user_pool_client_id := $(COGNITO_USER_POOL_CLIENT_ID)
+
 
 # database settings
 SERVICE_PREFIX_FOR_DB := service-finder-$(PROFILE)
@@ -86,3 +94,10 @@ MAIL_SENDER_NAME := NHS Service Finder
 MAIL_SENDER_EMAIL :=  info@$(TF_VAR_sf_domain_name)
 TF_VAR_mail_sender_email := $(MAIL_SENDER_EMAIL)
 TF_VAR_mail_sender_subject := $(MAIL_SENDER_NAME)
+
+#AUTH_LOGIN_URL := http://mockservice.sf.test:8080/app/controllers
+#AUTH_LOGIN_URI := /authentication/login
+#POSTCODE_MAPPING_SERVICE_URL := http://mockservice.sf.test:8080/app/controllers
+#POSTCODE_MAPPING_USER := service-finder-admin@nhs.net
+#POSTCODE_MAPPING_PASSWORD := password
+#UI_MAIN_UI := https://localhost:8080
