@@ -4,8 +4,8 @@ include $(VAR_DIR)/platform-texas/v1/account-live-k8s-nonprod.mk
 # Service variables
 AWS_CERTIFICATE := arn:aws:acm:eu-west-2:$(AWS_ACCOUNT_ID):certificate/c0718115-4e22-4f48-a4aa-8c16ea86c5e6
 
-PROFILE := dev
-ENVIRONMENT := $(PROFILE)
+ENVIRONMENT=dev
+PROFILE := $(ENVIRONMENT)
 SPRING_PROFILES_ACTIVE := $(PROFILE)
 API_IMAGE_TAG := v0.0.1
 VERSION := v0.0.1

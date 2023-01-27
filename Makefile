@@ -45,7 +45,7 @@ JENKINS_WORKSPACE_BUCKET := $(PROJECT_GROUP_SHORT)-$(PROJECT_NAME_SHORT)-jenkins
 
 # ==============================================================================
 # Feature flags:
-#include $(VAR_DIR)/feature-flags/$(PROFILE).mk
+include $(VAR_DIR)/feature-flags/$(PROFILE).mk
 # ==============================================================================
 
 include $(VAR_DIR)/profile/$(PROFILE).mk
@@ -218,6 +218,7 @@ project-push-image: ## Push the docker images (API) to the ECR
 deploy: # Deploy artefacts - mandatory: PROFILE=[name]
 	eval "$$(make aws-assume-role-export-variables)"
 	eval "$$(make project-populate-application-variables)"
+	eval "$$(make secret-fetch-and-export-variables NAME=$(SF_AWS_SECRET_NAME))"
 	make project-deploy PROFILE=$(PROFILE) STACK=application
 
 clean: # Clean up project
