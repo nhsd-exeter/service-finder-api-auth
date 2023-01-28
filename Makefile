@@ -72,12 +72,20 @@ get-project-vars:
 
 project-populate-application-variables:
 	export TTL=$$(make -s k8s-get-namespace-ttl)
+	echo "COGNITO_USER_POOL: ${COGNITO_USER_POOL}"
+	echo "DB_MASTER_PASSWORD_SECRET: ${DB_MASTER_PASSWORD_SECRET}"
+	echo "DB_PASSWORD_SECRET: ${DB_PASSWORD_SECRET}"
+	echo "FUZZY_PASSWORD_PROFILE: ${FUZZY_PASSWORD_PROFILE}"
 
 	export COGNITO_USER_POOL_CLIENT_SECRET=$$(make -s project-aws-get-cognito-client-secret NAME=$(COGNITO_USER_POOL))
 	export COGNITO_USER_POOL_CLIENT_ID=$$(make -s project-aws-get-cognito-client-id NAME=$(COGNITO_USER_POOL))
 	export COGNITO_USER_POOL_ID=$$(make -s aws-cognito-get-userpool-id NAME=$(COGNITO_USER_POOL))
 	export COGNITO_JWT_VERIFICATION_URL=https://cognito-idp.eu-west-2.amazonaws.com/$${COGNITO_USER_POOL_ID}/.well-known/jwks.json
-
+	echo "Cognito values"
+	echo "A: ${COGNITO_USER_POOL_CLIENT_SECRET}"
+	echo "B: ${COGNITO_USER_POOL_CLIENT_ID}"
+	echo "C: ${COGNITO_USER_POOL_ID}"
+	echo "D: ${COGNITO_JWT_VERIFICATION_URL}"
 	export DB_MASTER_PASSWORD=$$(make -s aws-secret-get NAME=$(DB_MASTER_PASSWORD_SECRET))
 	export DB_PASSWORD=$$(make -s aws-secret-get NAME=$(DB_PASSWORD_SECRET))
 	export POSTCODE_MAPPING_PASSWORD=$$(make secret-fetch NAME=uec-dos-api-sfsa-$(FUZZY_PASSWORD_PROFILE)-cognito-passwords | jq .POSTCODE_PASSWORD | tr -d '"' )
