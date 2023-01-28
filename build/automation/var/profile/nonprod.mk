@@ -95,9 +95,9 @@ MAIL_SENDER_EMAIL :=  info@$(TF_VAR_sf_domain_name)
 TF_VAR_mail_sender_email := $(MAIL_SENDER_EMAIL)
 TF_VAR_mail_sender_subject := $(MAIL_SENDER_NAME)
 
-#AUTH_LOGIN_URL := http://mockservice.sf.test:8080/app/controllers
-#AUTH_LOGIN_URI := /authentication/login
-#POSTCODE_MAPPING_SERVICE_URL := http://mockservice.sf.test:8080/app/controllers
-#POSTCODE_MAPPING_USER := service-finder-admin@nhs.net
-#POSTCODE_MAPPING_PASSWORD := password
-#UI_MAIN_UI := https://localhost:8080
+AUTH_LOGIN_URL := http://mockservice.sf.test:8080/app/controllers
+AUTH_LOGIN_URI := /authentication/login
+POSTCODE_MAPPING_SERVICE_URL := http://mockservice.sf.test:8080/app/controllers
+POSTCODE_MAPPING_USER := service-finder-admin@nhs.net
+POSTCODE_MAPPING_PASSWORD := password
+UI_MAIN_UI := $(TF_VAR_ui_main_url)
