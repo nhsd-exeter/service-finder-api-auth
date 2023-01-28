@@ -9,7 +9,7 @@ COGNITO_PROFILE=$PROFILE
 
 COGNITO_ADMIN_PASSWORD=$(
     aws secretsmanager get-secret-value \
-        --secret-id service-finder-auth-api-$COGNITO_PROFILE-cognito-admin-auth-password \
+        --secret-id service-finder-auth-api-$COGNITO_PROFILE-cognito-admin-password \
         --region $AWS_REGION \
         --query 'SecretString' \
         --output text)

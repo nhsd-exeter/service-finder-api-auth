@@ -30,7 +30,7 @@ IMAGE_BASE_VERSION := 1.0.20191119
 
 JENKINS_ROLE := jenkins_assume_role
 SF_AWS_SECRET_NAME := service-finder/deployment
-SF_AWS_ADMIN_USER_PASSWORD_SECRET = service-finder-$(PROFILE)-cognito-admin-password
+SF_AWS_ADMIN_USER_PASSWORD_SECRET = service-finder-auth-api-$(PROFILE)-cognito-admin-password
 SF_JENKINS_ENV = $(if $(HUDSON_URL),$(shell echo $(HUDSON_URL) | grep prod > /dev/null 2>&1 && echo $(DEFAULT_JENKINS_PROFILE_LIVE)|| echo $(DEFAULT_JENKINS_PROFILE)),$(DEFAULT_LOCAL_PROFILE))
 K8S_JOB_DATA_NAMESPACE = $(PROJECT_GROUP_SHORT)-$(PROJECT_NAME_SHORT)-job-data-$(PROFILE)
 K8S_JOB_ELASTIC_SEARCH_NAMESPACE = $(PROJECT_GROUP_SHORT)-$(PROJECT_NAME_SHORT)-job-es-$(PROFILE)

@@ -1,6 +1,6 @@
 resource "aws_secretsmanager_secret" "cognito_admin_password" {
-  name                    = "${var.service_prefix}-cognito-admin-auth-password"
-  description             = "Password for Cognito admin auth password"
+  name                    = "${var.service_prefix}-cognito-admin-password"
+  description             = "Password for Cognito admin password"
   recovery_window_in_days = 0
   tags                    = var.tags
 }
