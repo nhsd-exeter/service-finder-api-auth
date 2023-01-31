@@ -1,0 +1,8 @@
+# Run the following to get all users from Cognito.
+aws cognito-idp list-users --user-pool-id <UserPoolId> --output text --query 'Users[*].[Attributes[0].Value,Attributes[1].Value, Attributes[2].Value,UserCreateDate]' > cog-users.txt
+
+# Copy the contents of the file required into Excel and save as a CSV file (cog-users.csv).
+
+# Run the following command against the saved CSV file to generate the insert statements
+statement="insert into service_finder.user_compare_tmp(identity_provider_id,created_date,email_address,email_address_verified) VALUES ('"
+sed 's/FALSE/&);/g' cog-users.csv | sed 's/TRUE/&);/g' | sed 's/\t/,/g' | sed "s/,/',(TIMESTAMP 'epoch' + /1" | sed "s/,/ * INTERVAL '1 second'),'/2" | sed "s/,/',/3" | sed "s/^/$statement/g" > cog-user-insert.out

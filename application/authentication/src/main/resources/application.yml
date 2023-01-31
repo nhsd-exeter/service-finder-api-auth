@@ -1,7 +1,8 @@
 cognito:
-  userPool.clientId: ${COGNITO_USER_POOL_CLIENT_ID}
-  userPool.id: ${COGNITO_USER_POOL_ID}
-  userPool.clientSecret: ${COGNITO_USER_POOL_CLIENT_SECRET}
+  userPool:
+    clientId: ${COGNITO_USER_POOL_CLIENT_ID}
+    id: ${COGNITO_USER_POOL_ID}
+    clientSecret: ${COGNITO_USER_POOL_CLIENT_SECRET}
 
 server:
   port: ${SERVER_PORT}
@@ -12,3 +13,85 @@ server:
 
 configuration:
   version: ${VERSION}
+
+
+security:
+  oauth2:
+    resource:
+      jwk:
+        key-set-uri: ${COGNITO_JWT_VERIFICATION_URL}
+
+management:
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true
+      group:
+        readiness:
+          include: readinessState,db
+          show-details: always
+        liveness:
+          include: livenessState,db
+          show-details: always
+
+servicefinder:
+  mail:
+    senderName: ${MAIL_SENDER_NAME:NHS Service Finder}
+    senderEmail: ${MAIL_SENDER_EMAIL}
+  usermanagement:
+    cookie.domain: ${COOKIE_DOMAIN}
+    url: ${SF_AUTH_URL}
+    approvedDomains: nhs.net,*.nhs.uk,phe.gov.uk
+  admin:
+    emailaddress: service-finder-admin@nhs.net
+  allowedorigins: ${ALLOWED_ORIGINS}
+  url: ${UI_MAIN_UI}
+  maxLoginAttempts: 10
+
+spring:
+  devtools:
+    remote:
+      secret: hZaK8R3oxK1fuswQIB6PVXZZ4WbwFlgR
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}?ssl=${DB_ENCRYPTION}&sslmode=${DB_ENCRYPTION_MODE}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+      use-new-id-generator-mappings: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL95Dialect
+        globally_quoted_identifiers: true
+  autoconfigure.exclude: org.springframework.boot.actuate.autoconfigure.metrics.orm.jpa.HibernateMetricsAutoConfiguration
+api:
+  version: 1.0
+  title: ServiceFinder Authentication API
+  description: ServiceFinder Authentication API
+
+
+springdoc:
+  swagger-ui:
+    path: "/swagger-ui.html"
+
+auth:
+  login:
+    url: ${AUTH_LOGIN_URL}
+    uri: ${AUTH_LOGIN_URI}
+
+postcode:
+  mapping:
+    url: ${POSTCODE_MAPPING_SERVICE_URL}
+    uri: /regions
+    user: ${POSTCODE_MAPPING_USER}
+    password: ${POSTCODE_MAPPING_PASSWORD}
+
+logging:
+  pattern:
+    console: "{\"date-time\": \"%d\", \"level\": \"%p\", \"correlation-id\": \"%X{correlationId}\", \"source-path\": \"%logger{63}:%L\", \"message\": \"%replace(%m%wEx{6}){'[\r\n]+', '\\n'}%nopex\"}%n"
+  level:
+    root: INFO

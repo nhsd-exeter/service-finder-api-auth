@@ -4,11 +4,16 @@
 # again. When this gets to production it will be created from scratch so I don't
 # foresee any issues.
 resource "aws_cognito_user_pool" "pool" {
-  name                     = var.cognito_pool_name
+  name = var.cognito_pool_name
+
   username_attributes      = ["email"]
   auto_verified_attributes = ["email"]
   user_pool_add_ons {
     advanced_security_mode = "OFF"
+  }
+  email_configuration {
+    source_arn            = "arn:aws:ses:${var.ireland_region}:${var.aws_account}:identity/${var.email_address}"
+    email_sending_account = "DEVELOPER"
   }
 
   password_policy {
@@ -20,8 +25,9 @@ resource "aws_cognito_user_pool" "pool" {
     temporary_password_validity_days = 7
   }
 
-  username_configuration {
-    case_sensitive = false
+
+  lambda_config {
+    custom_message = aws_lambda_function.custom_registration_verification_email.arn
   }
 
   tags = var.tags
@@ -35,3 +41,4 @@ resource "aws_cognito_user_pool_client" "client" {
   generate_secret        = true
   refresh_token_validity = 1
 }
+# explicit_auth_flows    = ["USER_PASSWORD_AUTH","ALLOW_REFRESH_TOKEN_AUTH"] Enable instead once all secrets removed from code and cognito and secrets have been reset

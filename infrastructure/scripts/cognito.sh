@@ -9,14 +9,14 @@ COGNITO_PROFILE=$PROFILE
 
 COGNITO_ADMIN_PASSWORD=$(
     aws secretsmanager get-secret-value \
-        --secret-id api-authentication-$COGNITO_PROFILE-cognito-admin-password \
+        --secret-id service-finder-auth-api-$COGNITO_PROFILE-cognito-admin-password \
         --region $AWS_REGION \
         --query 'SecretString' \
         --output text)
 
 USER_POOL_ID=$(
     aws cognito-idp list-user-pools \
-        --query "UserPools[?Name=='api-authentication-$COGNITO_PROFILE-pool'].Id" \
+        --query "UserPools[?Name=='service-finder-auth-api-$COGNITO_PROFILE-pool'].Id" \
     --region $AWS_REGION \
         --max-results 60 \
         --output text)
