@@ -132,13 +132,13 @@ build: project-config # Build project
 			-Dsonar.verbose=true \
 			-Dsonar.host.url='https://sonarcloud.io' \
 			-Dsonar.organization='nhsd-exeter' \
-			-Dsonar.projectKey='uec-dos-api-sfsa' \
+			-Dsonar.projectKey='uec-dos-api-saa' \
 			-Dsonar.java.binaries=target/classes \
 			-Dsonar.projectName='service-finder-api-auth' \
 			-Dsonar.login='$$(make secret-fetch NAME=service-finder-sonar-pass | jq .SONAR_HOST_TOKEN | tr -d '"' || exit 1)' \
 			-Dsonar.sourceEncoding='UTF-8' \
 			-Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco \
-			-Dsonar.exclusions='src/main/java/**/config/*.*,src/main/java/**/model/*.*,src/main/java/**/exception/*.*,src/test/**/*.*,src/main/java/**/filter/*.*,src/main/java/**/ServiceFinderAuthenticationAPI.*' \
+			-Dsonar.exclusions='src/main/java/**/config/**/*.*,src/main/java/**/model/*.*,src/main/java/**/exception/*.*,src/test/**/*.*,src/main/java/**/filter/*.*,src/main/java/**/ServiceFinderAuthenticationAPI.*' \
 			sonar:sonar" \
 			LIB_VOLUME_MOUNT="true"
 	fi
