@@ -2,6 +2,7 @@ package uk.nhs.digital.uec.api.controller;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -33,6 +34,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import uk.nhs.digital.uec.api.common.factory.CookieFactory;
 import uk.nhs.digital.uec.api.common.model.LoginResult;
+import uk.nhs.digital.uec.api.common.model.RefreshTokens;
 import uk.nhs.digital.uec.api.adapter.UserAdapter;
 import uk.nhs.digital.uec.api.model.Location;
 import uk.nhs.digital.uec.api.model.PostcodeMapping;
@@ -182,5 +184,17 @@ public class LoginControllerTest {
 
     // When
     controller.login(userLogin, response);
+  }
+
+@Test
+  public void shouldReturnRefreshToken()  {
+    RefreshTokens refreshTokens = new RefreshTokens(anyString(),anyString());
+    LoginResult loginResult = new LoginResult();
+    given(userService.loginWithRefreshToken(refreshTokens.getRefreshToken(), refreshTokens.getIdentityProviderId())).willReturn(loginResult);
+    // When
+    ResponseEntity loginResponse = controller.refreshToken(refreshTokens);
+    assertThat(loginResponse.getStatusCode(), is(HttpStatus.OK));
+
+
   }
 }
