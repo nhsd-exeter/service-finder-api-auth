@@ -192,9 +192,12 @@ project-plan-deployment-destroy: ## Display what will occur during the deploymen
 	sleep $(SLEEP_AFTER_PLAN)
 
 project-populate-cognito: ## Populate cognito - optional: PROFILE=nonprod|prod,AWS_ROLE=Developer
-	eval "$$(make aws-assume-role-export-variables)"
-	$(PROJECT_DIR)/infrastructure/scripts/cognito.sh
-
+	if $(ADD_DEFAULT_COGNITO_USERS); then \
+		eval "$$(make aws-assume-role-export-variables)"
+		$(PROJECT_DIR)/infrastructure/scripts/cognito.sh
+	else
+		echo 'Default users already added to pool';
+	fi
 project-infrastructure-set-up-base: ## Set up infrastructure - optional: AWS_ROLE=Developer|jenkins_assume_role
 	eval "$$(make aws-assume-role-export-variables)"
 	make terraform-apply-auto-approve PROFILE=base-$(PROFILE)
