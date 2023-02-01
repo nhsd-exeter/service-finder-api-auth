@@ -97,9 +97,15 @@ MAIL_SENDER_EMAIL :=  info@$(TF_VAR_sf_domain_name)
 TF_VAR_mail_sender_email := $(MAIL_SENDER_EMAIL)
 TF_VAR_mail_sender_subject := $(MAIL_SENDER_NAME)
 
-AUTH_LOGIN_URL := http://mockservice.sf.test:8080/app/controllers
+
+AUTH_LOGIN_URL := https://uec-dos-api-sfsa-dmo-uec-dos-api-sfs-service.k8s-prod.texasplatform.uk
 AUTH_LOGIN_URI := /authentication/login
-POSTCODE_MAPPING_SERVICE_URL := http://mockservice.sf.test:8080/app/controllers
-POSTCODE_MAPPING_USER := service-finder-admin@nhs.net
-POSTCODE_MAPPING_PASSWORD := password
+
+
+POSTCODE_MAPPING_SERVICE_URL := https://uec-dos-api-pc-dmo-uec-dos-api-pc-ingress.k8s-prod.texasplatform.uk/api
+POSTCODE_MAPPING_USER := fuzzy-search-api@nhs.net
+POSTCODE_MAPPING_PASSWORD := $(POSTCODE_MAPPING_PASSWORD_DMO) # Temporary fix until secerts manager can be updated
+
+
+
 UI_MAIN_UI := $(TF_VAR_ui_main_url)

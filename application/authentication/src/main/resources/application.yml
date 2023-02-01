@@ -1,9 +1,9 @@
-cognito:
-  userPool:
-    clientId: ${COGNITO_USER_POOL_CLIENT_ID}
-    id: ${COGNITO_USER_POOL_ID}
-    clientSecret: ${COGNITO_USER_POOL_CLIENT_SECRET}
+management.endpoints.web.exposure.exclude: info
 
+userPool.clientId: ${COGNITO_USER_POOL_CLIENT_ID}
+userPool.id: ${COGNITO_USER_POOL_ID}
+userPool.clientSecret: ${COGNITO_USER_POOL_CLIENT_SECRET}
+security.oauth2.resource.jwk.key-set-uri: ${COGNITO_JWT_VERIFICATION_URL}
 server:
   port: ${SERVER_PORT}
   ssl:
