@@ -132,13 +132,13 @@ build: project-config # Build project
 			-Dsonar.verbose=true \
 			-Dsonar.host.url='https://sonarcloud.io' \
 			-Dsonar.organization='nhsd-exeter' \
-			-Dsonar.projectKey='uec-dos-api-sfsa' \
+			-Dsonar.projectKey='uec-dos-api-saa' \
 			-Dsonar.java.binaries=target/classes \
 			-Dsonar.projectName='service-finder-api-auth' \
 			-Dsonar.login='$$(make secret-fetch NAME=service-finder-sonar-pass | jq .SONAR_HOST_TOKEN | tr -d '"' || exit 1)' \
 			-Dsonar.sourceEncoding='UTF-8' \
 			-Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco \
-			-Dsonar.exclusions='src/main/java/**/config/*.*,src/main/java/**/model/*.*,src/main/java/**/exception/*.*,src/test/**/*.*,src/main/java/**/filter/*.*,src/main/java/**/ServiceFinderAuthenticationAPI.*' \
+			-Dsonar.exclusions='src/main/java/**/config/**/*.*,src/main/java/**/model/*.*,src/main/java/**/exception/*.*,src/test/**/*.*,src/main/java/**/filter/*.*,src/main/java/**/ServiceFinderAuthenticationAPI.*' \
 			sonar:sonar" \
 			LIB_VOLUME_MOUNT="true"
 	fi
@@ -192,9 +192,12 @@ project-plan-deployment-destroy: ## Display what will occur during the deploymen
 	sleep $(SLEEP_AFTER_PLAN)
 
 project-populate-cognito: ## Populate cognito - optional: PROFILE=nonprod|prod,AWS_ROLE=Developer
-	eval "$$(make aws-assume-role-export-variables)"
-	$(PROJECT_DIR)/infrastructure/scripts/cognito.sh
-
+	if $(ADD_DEFAULT_COGNITO_USERS); then \
+		eval "$$(make aws-assume-role-export-variables)"
+		$(PROJECT_DIR)/infrastructure/scripts/cognito.sh
+	else
+		echo 'Default users already added to pool';
+	fi
 project-infrastructure-set-up-base: ## Set up infrastructure - optional: AWS_ROLE=Developer|jenkins_assume_role
 	eval "$$(make aws-assume-role-export-variables)"
 	make terraform-apply-auto-approve PROFILE=base-$(PROFILE)

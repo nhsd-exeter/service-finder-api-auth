@@ -32,6 +32,8 @@ TF_VAR_aws_account_id := $(AWS_ACCOUNT_ID_NONPROD)
 TF_VAR_service_prefix := $(SERVICE_PREFIX)
 TF_VAR_service_prefix_short := saa-$(PROFILE)
 
+ADD_DEFAULT_COGNITO_USERS := false
+
 TF_VAR_service_finder_zone := servicefinder.nhs.uk
 TF_VAR_nhs_net_service_finder_zone := nhs.net
 TF_VAR_enable_vpn_access_to_rds := true
@@ -60,7 +62,7 @@ COGNITO_USER_POOL := $(TF_VAR_service_prefix)-pool
 COGNITO_USER_POOL_CLIENT_SECRET := $(or $(COGNITO_USER_POOL_CLIENT_SECRET), )
 COGNITO_USER_POOL_CLIENT_ID := $(or $(COGNITO_USER_POOL_CLIENT_ID), )
 COGNITO_USER_POOL_ID := $(or $(COGNITO_USER_POOL_ID), )
-#ADD_DEFAULT_COGNITO_USERS := true
+
 
 TF_VAR_cognito_user_pool_client_secret :=  $(COGNITO_USER_POOL_CLIENT_SECRET)
 TF_VAR_cognito_user_pool_client_id := $(COGNITO_USER_POOL_CLIENT_ID)

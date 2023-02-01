@@ -50,7 +50,7 @@ pipeline {
     stage('Populate Cognito') {
       steps {
         script {
-          sh 'make project-populate-cognito'
+          sh "make project-populate-cognito PROFILE=${env.PROFILE}"
         }
       }
     }
