@@ -106,7 +106,7 @@ public class EmailNotificationService implements NotificationService {
 
   private void sendApprovalMessage(User user, String subject, String template) {
     CheckArgument.isNotNull(user, "user must not be null");
-    log.debug("Sending email to user {} {}", user.getEmailAddress(), subject);
+    log.info("Sending email to user {} {}", user.getEmailAddress(), subject);
     ApprovalMessage approvalMessage =
         new ApprovalMessage(
             subject,
@@ -125,7 +125,7 @@ public class EmailNotificationService implements NotificationService {
 
     String time = date.format(DateTimeFormatter.ofPattern("HH:mm"));
     String day = date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-    log.debug("Sending email to user {} {}", user.getEmailAddress(), subject);
+    log.info("Sending email to user {} {}", user.getEmailAddress(), subject);
 
     PasswordResetMessage passwordResetMessage =
         new PasswordResetMessage(subject, day, time, HELP_DESK_URL);
@@ -150,7 +150,7 @@ public class EmailNotificationService implements NotificationService {
 
   private void sendMessage(User user, String subject, String template, Object message) {
     CheckArgument.isNotNull(user, "user must not be null");
-    log.debug("Sending email to user {} {}", user.getEmailAddress(), subject);
+    log.info("Sending email to user {} {}", user.getEmailAddress(), subject);
 
     try {
       mailClient.sendMessage(

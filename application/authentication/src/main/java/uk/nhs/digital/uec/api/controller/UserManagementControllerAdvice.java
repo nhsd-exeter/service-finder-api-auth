@@ -65,7 +65,7 @@ public class UserManagementControllerAdvice extends ResponseEntityExceptionHandl
   @ExceptionHandler(AccountNotApprovedException.class)
   protected ResponseEntity<Object> handleAccountNotApprovedException(AccountNotApprovedException ex,
       WebRequest request) {
-    log.info(ExceptionUtils.getStackTrace(ex));
+    log.error(ExceptionUtils.getStackTrace(ex));
     ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage(), new ArrayList<>());
     return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
   }
@@ -73,7 +73,7 @@ public class UserManagementControllerAdvice extends ResponseEntityExceptionHandl
   @ExceptionHandler(InvalidRegistrationDetailsException.class)
   protected ResponseEntity<Object> handleInvalidRegistrationDetailsException(InvalidRegistrationDetailsException ex,
       WebRequest request) {
-    log.info(ExceptionUtils.getStackTrace(ex));
+    log.error(ExceptionUtils.getStackTrace(ex));
     ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage(), ex.getErrors());
     return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
   }
@@ -87,28 +87,28 @@ public class UserManagementControllerAdvice extends ResponseEntityExceptionHandl
 
   @ExceptionHandler(InvalidCodeException.class)
   protected ResponseEntity<Object> handleInvalidCodeException(InvalidCodeException ex, WebRequest request) {
-    log.info(ExceptionUtils.getStackTrace(ex));
+    log.error(ExceptionUtils.getStackTrace(ex));
     ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, "Invalid code", new ArrayList<>());
     return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
   }
 
   @ExceptionHandler(InvalidEntityCodeException.class)
   protected ResponseEntity<Object> handleInvalidEntityCodeException(InvalidCodeException ex, WebRequest request) {
-    log.info(ExceptionUtils.getStackTrace(ex));
+    log.error(ExceptionUtils.getStackTrace(ex));
     ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage(), new ArrayList<>());
     return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
   }
 
   @ExceptionHandler(ExpiredCodeException.class)
   protected ResponseEntity<Object> handleExpiredCodeException(ExpiredCodeException ex, WebRequest request) {
-    log.info(ExceptionUtils.getStackTrace(ex));
+    log.error(ExceptionUtils.getStackTrace(ex));
     ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, "Code expired", new ArrayList<>());
     return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
   }
 
   @ExceptionHandler(AuthenticationException.class)
   protected ResponseEntity<Object> handleAuthenticationException(AuthenticationException ex, WebRequest request) {
-    log.info(ExceptionUtils.getStackTrace(ex));
+    log.error(ExceptionUtils.getStackTrace(ex));
     ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, "Not authorized to complete this action",
         new ArrayList<>());
     return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
@@ -116,7 +116,7 @@ public class UserManagementControllerAdvice extends ResponseEntityExceptionHandl
 
   @ExceptionHandler(UserIncompleteException.class)
   protected ResponseEntity<Object> handleUserIncompleteException(UserIncompleteException ex, WebRequest request) {
-    log.info(ExceptionUtils.getStackTrace(ex));
+    log.error(ExceptionUtils.getStackTrace(ex));
     ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, "Incomplete registration", new ArrayList<>());
     return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
   }
@@ -124,7 +124,7 @@ public class UserManagementControllerAdvice extends ResponseEntityExceptionHandl
   @ExceptionHandler(EmailAddressNotRegisteredException.class)
   protected ResponseEntity<Object> handleEmailAddressNotRegisteredException(EmailAddressNotRegisteredException ex,
       WebRequest request) {
-    log.info(ExceptionUtils.getStackTrace(ex));
+    log.error(ExceptionUtils.getStackTrace(ex));
     ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, "Email address not registered", new ArrayList<>());
     return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
   }
@@ -132,7 +132,7 @@ public class UserManagementControllerAdvice extends ResponseEntityExceptionHandl
   @ExceptionHandler(MissingRejectionReasonException.class)
   protected ResponseEntity<Object> handleMissingRejectionReasonException(MissingRejectionReasonException ex,
       WebRequest request) {
-    log.info(ExceptionUtils.getStackTrace(ex));
+    log.error(ExceptionUtils.getStackTrace(ex));
     ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, "Rejection reason missing", new ArrayList<>());
     return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
   }
@@ -140,7 +140,7 @@ public class UserManagementControllerAdvice extends ResponseEntityExceptionHandl
   @ExceptionHandler(RejectionReasonUpdateException.class)
   protected ResponseEntity<Object> handleRejectionReasonUpdateException(RejectionReasonUpdateException ex,
       WebRequest request) {
-    log.info(ExceptionUtils.getStackTrace(ex));
+    log.error(ExceptionUtils.getStackTrace(ex));
     ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, "Rejection reason supplied but this is not a rejection",
         new ArrayList<>());
     return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
@@ -149,7 +149,7 @@ public class UserManagementControllerAdvice extends ResponseEntityExceptionHandl
   @ExceptionHandler(ApprovedUserDeletionException.class)
   protected ResponseEntity<Object> handleApprovedUserDeletionException(ApprovedUserDeletionException ex,
       WebRequest request) {
-    log.info(ExceptionUtils.getStackTrace(ex));
+    log.error(ExceptionUtils.getStackTrace(ex));
     ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, "Approved users cannot be deleted", new ArrayList<>());
     return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
   }
@@ -163,21 +163,21 @@ public class UserManagementControllerAdvice extends ResponseEntityExceptionHandl
 
   @ExceptionHandler(NoRolesException.class)
   protected ResponseEntity<Object> handleNoRolesException(NoRolesException ex, WebRequest request) {
-    log.info(ExceptionUtils.getStackTrace(ex));
+    log.error(ExceptionUtils.getStackTrace(ex));
     ApiError apiError = new ApiError(HttpStatus.FORBIDDEN, "No roles, no access", new ArrayList<>());
     return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.FORBIDDEN, request);
   }
 
   @ExceptionHandler(IllegalArgumentException.class)
   protected ResponseEntity<Object> handleIllegalArgumentException(Exception ex, WebRequest request) {
-    log.info(ExceptionUtils.getStackTrace(ex));
+    log.error(ExceptionUtils.getStackTrace(ex));
     ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage(), new ArrayList<>());
     return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
   }
 
   @ExceptionHandler(UserNotFoundException.class)
   protected ResponseEntity<Object> handleUserSynchronizationException(UserNotFoundException ex, WebRequest request) {
-    log.info(ExceptionUtils.getStackTrace(ex));
+    log.error(ExceptionUtils.getStackTrace(ex));
     ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, "User not found", new ArrayList<>());
     return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
   }
@@ -193,7 +193,7 @@ public class UserManagementControllerAdvice extends ResponseEntityExceptionHandl
 
   @ExceptionHandler(value = { AccessDeniedException.class })
   protected ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException ex, WebRequest request) {
-    log.info(ExceptionUtils.getStackTrace(ex));
+    log.error(ExceptionUtils.getStackTrace(ex));
     ApiError apiError = new ApiError(HttpStatus.FORBIDDEN, ex.getMessage(), new ArrayList<>());
     return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.FORBIDDEN, request);
   }
@@ -208,7 +208,7 @@ public class UserManagementControllerAdvice extends ResponseEntityExceptionHandl
   @ExceptionHandler(ForgotPasswordBadEmailAddressException.class)
   protected ResponseEntity<Object> handleForgotPasswordBadEmailAddressException(
       ForgotPasswordBadEmailAddressException ex, WebRequest request) {
-    log.info(ExceptionUtils.getStackTrace(ex));
+    log.error(ExceptionUtils.getStackTrace(ex));
     ApiError apiError = new ApiError(HttpStatus.OK, "", new ArrayList<>());
     return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.OK, request);
   }
@@ -223,7 +223,7 @@ public class UserManagementControllerAdvice extends ResponseEntityExceptionHandl
   @ExceptionHandler(AccountAlreadyRegisteredException.class)
   protected ResponseEntity<Object> handleAccountAlreadyRegisteredException(AccountAlreadyRegisteredException ex,
       WebRequest request) {
-    log.info(ExceptionUtils.getStackTrace(ex));
+    log.error(ExceptionUtils.getStackTrace(ex));
     ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage(), new ArrayList<>());
     return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
   }
@@ -231,7 +231,7 @@ public class UserManagementControllerAdvice extends ResponseEntityExceptionHandl
   @ExceptionHandler(ApprovedAccountAlreadyRegisteredException.class)
   protected ResponseEntity<Object> handleApprovedAccountAlreadyRegisteredException(
       ApprovedAccountAlreadyRegisteredException ex, WebRequest request) {
-    log.info(ExceptionUtils.getStackTrace(ex));
+    log.error(ExceptionUtils.getStackTrace(ex));
     ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage(), new ArrayList<>());
     return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
   }
@@ -239,14 +239,14 @@ public class UserManagementControllerAdvice extends ResponseEntityExceptionHandl
   @ExceptionHandler(RegistrationExpiredCodeException.class)
   protected ResponseEntity<Object> handleRegistrationExpiredCodeException(RegistrationExpiredCodeException ex,
       WebRequest request) {
-    log.info(ExceptionUtils.getStackTrace(ex));
+    log.error(ExceptionUtils.getStackTrace(ex));
     ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage(), new ArrayList<>());
     return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
   }
 
   @ExceptionHandler(RegistrationInvalidCodeException.class)
   protected ResponseEntity<Object> handleInvalidCodeException(RegistrationInvalidCodeException ex, WebRequest request) {
-    log.info(ExceptionUtils.getStackTrace(ex));
+    log.error(ExceptionUtils.getStackTrace(ex));
     ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage(), new ArrayList<>());
     return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
   }
@@ -254,7 +254,7 @@ public class UserManagementControllerAdvice extends ResponseEntityExceptionHandl
   @ExceptionHandler(RegistrationEmailAddressNotRegisteredException.class)
   protected ResponseEntity<Object> handleRegistrationEmailAddressNotRegisteredException(
       RegistrationEmailAddressNotRegisteredException ex, WebRequest request) {
-    log.info(ExceptionUtils.getStackTrace(ex));
+    log.error(ExceptionUtils.getStackTrace(ex));
     ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage(), new ArrayList<>());
     return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
   }
